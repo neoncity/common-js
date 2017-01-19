@@ -1,1 +1,1 @@
-import './env';
+export * from './env';
