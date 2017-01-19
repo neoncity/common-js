@@ -2,6 +2,7 @@
 *~
 
 # Build process output files.
+/lib/
 /out/
 
 # NPM packages.

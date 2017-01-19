@@ -5,11 +5,11 @@ const webpack = require('webpack');
 module.exports = {
     target: 'node',
     entry: {
-        lib: './src/index.ts',
+        index: './src/index.ts',
         tests: './tests/index.ts',
     },
     output: {
-        path: path.resolve(__dirname, 'out'),
+        path: path.resolve(__dirname, 'lib'),
         filename: '[name].js'
     },
     module: {
