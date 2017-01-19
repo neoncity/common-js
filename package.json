@@ -18,7 +18,7 @@
   ],
   "license": "UNLICENSED",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
     "@neoncity/togemfury": "^0.0.2"
   }
 }
