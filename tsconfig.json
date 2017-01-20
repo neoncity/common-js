@@ -8,6 +8,11 @@
         "noUnusedParameters": true,
         "strictNullChecks": true,
         "sourceMap": true,
-        "declaration": true
-    }
+        "declaration": true,
+        "outDir": "./lib"
+    },
+    "include": [
+        "./src/**/*",
+        "./tests/**/*"
+    ]
 }

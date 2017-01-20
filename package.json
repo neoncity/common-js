@@ -1,12 +1,12 @@
 {
   "name": "@neoncity/common-js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Things shared between packages. Isomorphic, of course.",
   "author": "NeonCity team",
   "scripts": {
-    "build": "webpack",
-    "pretest": "webpack",
-    "test": "mocha lib/tests.js",
+    "build": "tsc",
+    "pretest": "tsc",
+    "test": "mocha lib/tests/index.js",
     "test-with-coverage": "webpack && istanbul cover --config ./.istanbul.yml ./node_modules/mocha/bin/_mocha -- lib/tests.js && remap-istanbul -i ./lib/coverage/coverage-final.json -o ./lib/coverage/coverage-remapped.json && coverage-filter -i ./lib/coverage/coverage-remapped.json -o ./lib/coverage/coverage-filtered.json",
     "push-coverage-to-codecov": "codecov -f ./lib/coverage/coverage-filtered.json"
   },
@@ -20,12 +20,9 @@
   "private": true,
   "homepage": "https://github.com/neoncity/common-js#readme",
   "main": "./lib/index.js",
-  "types": "./lib/src/index.d.ts",
+  "types": "./lib/index.d.ts",
   "files": [
-    "lib",
-    "src",
-    "tsconfig.json",
-    "webpack.config.js"
+    "lib"
   ],
   "license": "UNLICENSED",
   "dependencies": {},
