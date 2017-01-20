@@ -1,13 +1,13 @@
 {
   "name": "@neoncity/common-js",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Things shared between packages. Isomorphic, of course.",
   "author": "NeonCity team",
   "scripts": {
     "build": "tsc",
     "pretest": "tsc",
     "test": "mocha lib/tests/index.js",
-    "test-with-coverage": "webpack && istanbul cover --config ./.istanbul.yml ./node_modules/mocha/bin/_mocha -- lib/tests.js && remap-istanbul -i ./lib/coverage/coverage-final.json -o ./lib/coverage/coverage-remapped.json && coverage-filter -i ./lib/coverage/coverage-remapped.json -o ./lib/coverage/coverage-filtered.json",
+    "test-with-coverage": "tsc && istanbul cover --config ./.istanbul.yml ./node_modules/mocha/bin/_mocha -- lib/tests/index.js && remap-istanbul -i ./lib/coverage/coverage-final.json -o ./lib/coverage/coverage-remapped.json && coverage-filter -i ./lib/coverage/coverage-remapped.json -o ./lib/coverage/coverage-filtered.json",
     "push-coverage-to-codecov": "codecov -f ./lib/coverage/coverage-filtered.json"
   },
   "keywords": [
@@ -22,7 +22,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "files": [
-    "lib"
+    "lib/src"
   ],
   "license": "UNLICENSED",
   "dependencies": {},
@@ -30,6 +30,7 @@
     "@neoncity/coverage-filter": "^0.0.4",
     "@neoncity/togemfury": "^0.0.2",
     "@types/chai": "^3.4.34",
+    "@types/istanbul": "^0.4.29",
     "@types/mocha": "^2.2.38",
     "@types/node": "^7.0.0",
     "chai": "^3.5.0",
@@ -37,9 +38,6 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "remap-istanbul": "^0.8.4",
-    "ts-loader": "^1.3.3",
-    "typescript": "^2.1.5",
-    "webpack": "^1.14.0",
-    "webpack-fail-plugin": "^1.0.5"
+    "typescript": "^2.1.5"
   }
 }
