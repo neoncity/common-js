@@ -9,7 +9,7 @@
         "strictNullChecks": true,
         "sourceMap": true,
         "declaration": true,
-        "outDir": "./lib"
+        "outDir": "./out"
     },
     "include": [
         "./src/**/*",
