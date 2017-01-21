@@ -6,9 +6,9 @@
   "scripts": {
     "build": "tsc",
     "pretest": "tsc",
-    "test": "mocha lib/tests/index.js",
-    "test-with-coverage": "tsc && istanbul cover --config ./.istanbul.yml ./node_modules/mocha/bin/_mocha -- lib/tests/index.js && remap-istanbul -i ./lib/coverage/coverage-final.json -o ./lib/coverage/coverage-remapped.json && coverage-filter -i ./lib/coverage/coverage-remapped.json -o ./lib/coverage/coverage-filtered.json",
-    "push-coverage-to-codecov": "codecov -f ./lib/coverage/coverage-filtered.json"
+    "test": "mocha out/tests/index.js",
+    "test-with-coverage": "tsc && istanbul cover --config ./.istanbul.yml ./node_modules/mocha/bin/_mocha -- out/tests/index.js && remap-istanbul -i ./out/coverage/coverage-final.json -o ./out/coverage/coverage-remapped.json && coverage-filter -i ./out/coverage/coverage-remapped.json -o ./out/coverage/coverage-filtered.json",
+    "push-coverage-to-codecov": "codecov -f ./out/coverage/coverage-filtered.json"
   },
   "keywords": [
     "common"
@@ -19,8 +19,8 @@
   },
   "private": true,
   "homepage": "https://github.com/neoncity/common-js#readme",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "filesPack": {
     "lib/src": "e:.",
     "README.md": "f:README.md",
