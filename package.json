@@ -22,7 +22,7 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "filesPack": {
-    "lib/src": "e:.",
+    "out/src": "e:.",
     "README.md": "f:README.md",
     "package.json": "f:package.json",
     "tsconfig.json": "f:tsconfig.json"
