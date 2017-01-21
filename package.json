@@ -1,6 +1,6 @@
 {
   "name": "@neoncity/common-js",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Things shared between packages. Isomorphic, of course.",
   "author": "NeonCity team",
   "scripts": {
@@ -30,7 +30,7 @@
   "license": "UNLICENSED",
   "dependencies": {},
   "devDependencies": {
-    "@neoncity/coverage-filter": "^0.0.4",
+    "@neoncity/coverage-filter": "^0.0.5",
     "@neoncity/togemfury": "^0.0.9",
     "@types/chai": "^3.4.34",
     "@types/istanbul": "^0.4.29",
