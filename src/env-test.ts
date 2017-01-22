@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import 'mocha'
 
-import { Env, parseEnv, isLocal} from '../src/env'
+import { Env, parseEnv, isLocal} from './env'
 
 describe('Env', () => {
     describe('parseEnv', () => {
