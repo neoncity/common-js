@@ -12,7 +12,7 @@ export class IdMarshaller implements Marshaller<number, number> {
     
     extract(raw: number): number {
         if (raw <= 0) {
-	    throw new ExtractError();
+	    throw new ExtractError('Non-positive id');
 	}
 
 	return raw;
