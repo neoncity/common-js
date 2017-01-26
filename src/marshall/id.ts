@@ -1,16 +1,12 @@
 import { Marshaller, ExtractError } from './index';
 
 
-export class IdMarshaller implements Marshaller<number, number> {
-    static Schema = {
-	'$schema': 'http://json-schema.org/draft-04/schema#',
-	'title': 'Id',
-	'description': 'An unique id for the entiry',
-	'type': 'integer',
-	'minimum': 1
-    }
-    
-    extract(raw: number): number {
+export class IdMarshaller implements Marshaller<number> {
+    extract(raw: any): number {
+	if (typeof raw !== 'number') {
+	    throw new ExtractError('Non-numeric id');
+	}
+	
         if (raw <= 0) {
 	    throw new ExtractError('Non-positive id');
 	}
@@ -18,7 +14,7 @@ export class IdMarshaller implements Marshaller<number, number> {
 	return raw;
     }
 
-    pack(cooked: number): number {
+    pack(cooked: number): any {
 	return cooked;
     }
 }

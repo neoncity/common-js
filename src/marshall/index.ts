@@ -22,7 +22,7 @@ export class PackError extends MarshallError {
 }
 
 
-export interface Marshaller<Cooked, Raw> {
-    extract(raw: Raw): Cooked;
-    pack(cooked: Cooked): Raw;
+export interface Marshaller<T> {
+    extract(raw: any): T;
+    pack(cooked: T): any;
 }
