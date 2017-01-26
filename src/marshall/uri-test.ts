@@ -4,11 +4,28 @@ import 'mocha'
 import { UriMarshaller } from './uri';
 
 
+// Uri examples are copied from valid-url tests, which in turn borrowed from the
+// Perl module.
 describe('UriMarshaller', () => {
     const Uris = [
 	'http://google.com',
 	'https://stackoverflow.com',
-	'http://example.com/test'
+	'http://example.com/test',
+        'https://www.example.com/',
+        'https://www.example.com',
+        'https://www.example.com/foo/bar/test.html',
+        'https://www.example.com/?foo=bar',
+        'https://www.example.com:8080/test.html',
+        'http://www.example.com/',
+        'http://www.example.com',
+        'http://www.example.com/foo/bar/test.html',
+        'http://www.example.com/?foo=bar',
+        'http://www.example.com/?foo=bar&space=trucks',
+        'http://www.example.com?foo=bar',        
+        'http://www.example.com?foo=bar&space=trucks',
+        'http://www.example.com:8080/test.html',
+        'http://example.w3.org/path%20with%20spaces.html',
+        'http://192.168.0.1/'
     ];
 
     const NonStrings = [
@@ -23,10 +40,20 @@ describe('UriMarshaller', () => {
     ];
 
     const InvalidUris = [
-	'',
-	'fpt://ftp.richardsonnen.com',
-	'http:www.richardsonnen.com',
-	'https:www.richardsonnen.com'
+        '',
+        'foo',
+        'foo@bar',
+        'http://<foo>',
+        '://bob/',
+        '1http://bob',
+        '1http:////foo.html',
+        'http://example.w3.org/%illegal.html',
+        'http://example.w3.org/%a',
+        'http://example.w3.org/%a/foo',
+        'http://example.w3.org/%at',
+        'ftp://ftp.example.com',
+        'https:www.example.com',
+        'http:www.example.com'
     ];
 
     describe('extract', () => {
