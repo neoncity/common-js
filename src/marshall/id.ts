@@ -14,7 +14,7 @@ export class IdMarshaller implements Marshaller<number> {
 	return raw;
     }
 
-    pack(cooked: number): any {
-	return cooked;
+    pack(id: number): any {
+	return id;
     }
 }

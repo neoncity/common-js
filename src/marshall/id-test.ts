@@ -5,26 +5,39 @@ import { IdMarshaller } from './id';
 
 
 describe('IdMarshaller', () => {
+    const Ids = [
+	1,
+	103,
+	23213131
+    ];
+
+    const NonNumerics = [
+	null,
+	undefined,
+	'hello',
+	'100',
+	[],
+	[100],
+	{},
+	{hello: 100}	
+    ];
+    
     describe('extract', () => {
-        it('should parse valid ids', () => {
-            const idMarshaller = new IdMarshaller();
-        
-            expect(idMarshaller.extract(1)).to.equal(1);
-            expect(idMarshaller.extract(103)).to.equal(103);
-        });
+	for (let id of Ids) {
+            it(`should parse ${id} `, () => {
+		const idMarshaller = new IdMarshaller();
+		
+		expect(idMarshaller.extract(id)).to.equal(id);
+            });
+	}
 
-	it('should throw at non-numerics', () => {
-	    const idMarshaller = new IdMarshaller();
+	for (let nonNumeric of NonNumerics) {
+    	    it(`should throw for ${JSON.stringify(nonNumeric)}`, () => {
+    		const idMarshaller = new IdMarshaller();
 
-	    expect(() => idMarshaller.extract(null)).to.throw('Non-numeric id');
-	    expect(() => idMarshaller.extract(undefined)).to.throw('Non-numeric id');
-	    expect(() => idMarshaller.extract('hello')).to.throw('Non-numeric id');
-	    expect(() => idMarshaller.extract('100')).to.throw('Non-numeric id');
-	    expect(() => idMarshaller.extract([])).to.throw('Non-numeric id');
-	    expect(() => idMarshaller.extract([100])).to.throw('Non-numeric id');
-	    expect(() => idMarshaller.extract({})).to.throw('Non-numeric id');
-	    expect(() => idMarshaller.extract({hello: 100})).to.throw('Non-numeric id');
-	});
+    		expect(() => idMarshaller.extract(nonNumeric)).to.throw('Non-numeric id');
+    	    });
+	}
 
         it('should throw at id zero', () => {
             const idMarshaller = new IdMarshaller();
@@ -41,24 +54,26 @@ describe('IdMarshaller', () => {
     });
 
     describe('pack', () => {
-	it('should produce the same input', () => {
-	    const idMarshaller = new IdMarshaller();
+	for (let id of Ids) {
+	    it(`should produce the same input for ${id}`, () => {
+		const idMarshaller = new IdMarshaller();
 
-	    expect(idMarshaller.pack(10)).to.equal(10);
-	});
+		expect(idMarshaller.pack(id)).to.equal(id);
+	    });
+	}
     });
 
     describe('extract and pack', () => {
-	it('should be opposites', () => {
-	    const idMarshaller = new IdMarshaller();
+	for (let id of Ids) {
+	    it(`should be opposites ${id}`, () => {
+		const idMarshaller = new IdMarshaller();
 
-	    const raw = 10;
-	    const extracted = idMarshaller.extract(raw);
-	    const packed = idMarshaller.pack(extracted);
+		const raw = id;
+		const extracted = idMarshaller.extract(raw);
+		const packed = idMarshaller.pack(extracted);
 
-	    expect(packed).to.equal(raw);
-	});
+		expect(packed).to.equal(raw);
+	    });
+	}
     });
 });
-
-
