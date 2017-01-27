@@ -28,6 +28,51 @@ export interface Marshaller<T> {
 }
 
 
+export class BooleanMarshaller implements Marshaller<boolean> {
+    extract(raw: any): boolean {
+	if (typeof raw !== 'boolean') {
+	    throw new ExtractError('Expected a boolean');
+	}
+
+	return raw;
+    }
+
+    pack(cooked: boolean): any {
+	return cooked;
+    }
+}
+
+
+export class NumberMarshaller implements Marshaller<number> {
+    extract(raw: any): number {
+	if (typeof raw !== 'number') {
+	    throw new ExtractError('Expected a number');
+	}
+
+	return raw;
+    }
+
+    pack(cooked: number): any {
+	return cooked;
+    }
+}
+
+
+export class StringMarshaller implements Marshaller<string> {
+    extract(raw: any): string {
+	if (typeof raw !== 'string') {
+	    throw new ExtractError('Expected a string');
+	}
+
+	return raw;
+    }
+
+    pack(cooked: string): any {
+	return cooked;
+    }
+}
+
+
 export class OptionalMarshaller<T> implements Marshaller<T> {
     private _inner: Marshaller<T>;
 
