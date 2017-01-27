@@ -1,13 +1,39 @@
-import { ArrayMarshaller, ObjectMarshaller, OptionalMarshaller, MarshalSchema} from './index';
+import { Marshaller, ArrayMarshaller, ObjectMarshaller, OptionalMarshaller, MarshalSchema, StringMarshaller } from './index';
 
 import { IdMarshaller } from './id';
 import { UriMarshaller } from './uri';
 
-interface BasicUser {
-    userId: number;
-    pictureUri: string;
-    score?: number;
+function MarshalWith<T>(marshallerCtor: new () => Marshaller<T>) {
+    return function(target: any, propertyKey: string) {
+	if (!target.hasOwnProperty('__schema')) {
+	    target.__schema = {};
+	}
+	
+	target.__schema[propertyKey] = marshallerCtor;
+    }
 }
+
+class ProfileInfo {
+    @MarshalWith(StringMarshaller)
+    name: string;
+}
+
+//@Marshaled
+class BasicUser {
+    @MarshalWith(IdMarshaller)
+    userId: number;
+
+    @MarshalWith(UriMarshaller)
+    pictureUri: string;
+
+    @MarshalWith(IdMarshaller)
+    score?: number;
+
+    @MarshalWith(ProfileInfo)
+    profileInfo: ProfileInfo;
+}
+
+class BasicUserMarshaller extends AnnotatedMarshaller<BasicUser> {}
 
 const schema: MarshalSchema<BasicUser> = {
     userId: new IdMarshaller(),
@@ -18,6 +44,8 @@ const schema: MarshalSchema<BasicUser> = {
 const om = new ObjectMarshaller(schema);
 
 const lom = new ArrayMarshaller(om);
+
+console.log((BasicUser.prototype as any).__schema);
 
 
 console.log(JSON.stringify(om.extract({'userId': 10, 'pictureUri': 'http://example.com', 'foo': 'bar', 'score': 10})));
