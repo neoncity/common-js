@@ -204,31 +204,80 @@ export class SingleArrayMarshaller<T> extends BaseArrayMarshaller<T> {
 }
 
 
+export type MarshalObject = {
+    [key: string]: any
+}
+
+
+export abstract class BaseObjectMarshaller<T extends Object> extends RaiseBuildFilterMarshaller<MarshalObject, T> {
+    raise(raw: any): MarshalObject {
+        if (!(raw instanceof Object)) {
+            throw new ExtractError('Non-object input');
+        }
+
+	return raw;
+    }
+
+    lower(a: MarshalObject): any {
+	return a;
+    }
+}
+
+
+export type MarshalMap<K> = {
+    [key: string]: K
+}
+
+
+export abstract class MapMarshaller<K> extends BaseObjectMarshaller<MarshalMap<K>> {
+    private _inner: Marshaller<K>;
+
+    constructor(inner: Marshaller<K>) {
+	super();
+	this._inner = inner;
+    }
+
+
+    build(a: MarshalObject): MarshalMap<K> {
+	const cooked: MarshalMap<K> = {};
+
+	for (let key in a) {
+	    cooked[key] = this._inner.extract(a[key]);
+	}
+
+	return cooked;
+    }
+
+    unbuild(cooked: MarshalMap<K>): MarshalObject {
+	const a: MarshalObject = {};
+
+	for (let key in cooked) {
+	    a[key] = this._inner.pack(cooked[key]);
+	}
+
+	return a;
+    }
+}
+
+
 export type MarshalSchema<T extends Object> = {
     [key in keyof T]: Marshaller<any>
 }
 
 
-export class ObjectMarshaller<T extends Object> implements Marshaller<T> {
+export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> {
     private _schema: MarshalSchema<T>;
 
     constructor(schema: MarshalSchema<T>) {
+	super();
         this._schema = schema;
     }
 
-    extract(raw: any): T {
-        if (!(raw instanceof Object)) {
-            throw new ExtractError('Non-object input');
-        }
-
+    build(raw: MarshalObject): T {
         // We're gonna build it to it's final form in a typesafe way here.
         const cooked = {} as T;
 
         for (let propName in this._schema) {
-	    if (this._schema[propName] instanceof OptionalMarshaller && !raw.hasOwnProperty(propName)) {
-		continue;
-	    }
-	    
             if (!raw.hasOwnProperty(propName)) {
                 throw new ExtractError(`Field ${propName} is missing`);
             }
@@ -236,85 +285,20 @@ export class ObjectMarshaller<T extends Object> implements Marshaller<T> {
             cooked[propName] = this._schema[propName].extract(raw[propName]);
         }
 
-        // This is where the schema 
         return cooked;
     }
 
-    pack(cooked: T): any {
-        return cooked;
+    unbuild(cooked: T): MarshalObject {
+	const b: MarshalObject = {};
+
+	for (let propName in this._schema) {
+	    if (!cooked.hasOwnProperty(propName)) {
+		throw new PackError(`Field ${propName} is missing`);
+	    }
+
+	    b[propName] = this._schema[propName].pack(cooked[propName]);
+	}
+
+	return b;
     }
 }
-
-
-// export abstract class ChainedMarshaller<T> implements Marshaller<T> {
-//     extract(raw: any): T {
-//     }
-
-//     pack(cooked: T): any {
-//     }
-
-//     abstract linkExtract(raw: any): T {
-//     }
-// }
-
-
-// //// --- exploration.
-
-
-// interface Marshaller<T> {} // Something which marshalls from any to T
-
-// // primitive & basic marshallers
-// class BooleanMarshaller : Marshaller<boolean> {} // Marshalls from any to boolean
-// class NumberMarshaller : Marshaller<number> {} // Marshalls from any to number
-// class StringMarshaller : Marshaller<string> {} // Marshalls from any to string
-
-// // composite marshallers
-// class ArrayMarshaller<T>(inner: Marshaller<T>) : Marshaller<T[]> {} // Marshalls from any to T[]
-// class OptionalMarshaller<T>(inner: Marshaller<T>): Marshaller<T|null> {} // Marshalls from any to T|null
-// class ObjectMarshaller<T>(schema: MarshalSchema) : Marshaller<T> {} // Marshalls an any into an Object with a given structure
-
-// class UriMarshaller : StringMarshaller {} // output is still string, so we can do
-// UriMarshaller {
-//     extract(raw: any): string => {const l = super.extract(raw); .... }
-//     // but we'd actually like
-//     extract(raw: string): string
-// }
-
-// //we could have
-// class ChainedMarshaller<A, B> implements Marshaller<B> {
-//     extract(raw: any): B => same as ChainedMarshaller
-//     abstract raise(raw: any): A
-//     step(a: A): B
-// }
-
-// class BaseStringMarshaller<T> implements ChainedMarshaller<string, T> {
-//     raise() => do the string
-// }
-
-// class UriMarshaller extends BaseStringMarshaller<URI> {
-//     step() => check it is an Uri
-// }
-
-// class WebUriMarshaller extends UriMarshaller {
-//     step() => assert it is an http|https
-// }
-
-// class BaseNumberMarshaller<T> implements ChainedMarshaller<number, T> {
-//     raise() => do the int
-// }
-
-// class DateMarshaller implements BaseNumberMarshaller<Date> {
-//     step() => do the thing
-// }
-
-// // but perhaps, too much power?
-
-// class User {
-//     @Marshal(IdMarshaller)
-//     id: number;
-//     @Marshal(Optional(IdMarshaller))
-//     fbId: number
-//     @Marshal(Array(ProfilesMarshaller))
-//     profiles: Profiles[]
-//     @Marshal(Marshaller(User))
-// }
