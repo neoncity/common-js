@@ -35,7 +35,7 @@ describe('IdMarshaller', () => {
     	    it(`should throw for ${JSON.stringify(nonNumeric)}`, () => {
     		const idMarshaller = new IdMarshaller();
 
-    		expect(() => idMarshaller.extract(nonNumeric)).to.throw('Non-numeric id');
+    		expect(() => idMarshaller.extract(nonNumeric)).to.throw('Expected a number');
     	    });
 	}
 

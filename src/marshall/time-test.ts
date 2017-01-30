@@ -35,7 +35,7 @@ describe('TimeMarshaller', () => {
     	    it(`should throw for ${JSON.stringify(nonNumeric)}`, () => {
     		const timeMarshaller = new TimeMarshaller();
 
-    		expect(() => timeMarshaller.extract(nonNumeric)).to.throw('Non-numeric time');
+    		expect(() => timeMarshaller.extract(nonNumeric)).to.throw('Expected a number');
     	    });
 	}
 

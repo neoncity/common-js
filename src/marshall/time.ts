@@ -1,20 +1,16 @@
-import { Marshaller, ExtractError } from './index';
+import { BaseNumberMarshaller, ExtractError } from './index';
 
 
-export class TimeMarshaller implements Marshaller<Date> {
-    extract(raw: any): Date {
-	if (typeof raw !== 'number') {
-	    throw new ExtractError('Non-numeric timestamp');
-	}
-
-	if (raw < 0) {
+export class TimeMarshaller extends BaseNumberMarshaller<Date> {
+    build(a: number): Date {
+	if (a < 0) {
 	    throw new ExtractError('Non-positive timestamp');
 	}
 
-	return new Date(raw);
+	return new Date(a);
     }
 
-    pack(date: Date): any {
+    unbuild(date: Date): number {
 	return date.getTime();
     }
 }

@@ -1,13 +1,13 @@
 import { expect } from 'chai'
 import 'mocha'
 
-import { UriMarshaller } from './uri';
+import { WebUriMarshaller } from './uri';
 
 
-// Uri examples are copied from valid-url tests, which in turn borrowed from the
+// WebUri examples are copied from valid-url tests, which in turn borrowed from the
 // Perl module.
-describe('UriMarshaller', () => {
-    const Uris = [
+describe('WebUriMarshaller', () => {
+    const WebUris = [
 	'http://google.com',
 	'https://stackoverflow.com',
 	'http://example.com/test',
@@ -50,16 +50,19 @@ describe('UriMarshaller', () => {
         'http://example.w3.org/%illegal.html',
         'http://example.w3.org/%a',
         'http://example.w3.org/%a/foo',
-        'http://example.w3.org/%at',
+        'http://example.w3.org/%at'
+    ];
+
+    const InvalidWebUris = [
         'ftp://ftp.example.com',
         'https:www.example.com',
         'http:www.example.com'
     ];
 
     describe('extract', () => {
-	for (let uri of Uris) {
+	for (let uri of WebUris) {
 	    it(`should parse ${uri}`, () => {
-		const uriMarshaller = new UriMarshaller();
+		const uriMarshaller = new WebUriMarshaller();
 
 		expect(uriMarshaller.extract(uri)).to.equal(uri);
 	    });
@@ -67,17 +70,25 @@ describe('UriMarshaller', () => {
 
 	for (let nonString of NonStrings) {
 	    it(`should throw for ${JSON.stringify(nonString)}`, () => {
-		const uriMarshaller = new UriMarshaller();
+		const uriMarshaller = new WebUriMarshaller();
 
-		expect(() => uriMarshaller.extract(nonString)).to.throw('Non-string URI');
+		expect(() => uriMarshaller.extract(nonString)).to.throw('Expected a string');
 	    });
 	}
 
 	for (let invalidUri of InvalidUris) {
 	    it(`should throw for ${JSON.stringify(invalidUri)}`, () => {
-		const uriMarshaller = new UriMarshaller();
+		const uriMarshaller = new WebUriMarshaller();
 
 		expect(() => uriMarshaller.extract(invalidUri)).to.throw('Not a valid URI');
+	    });
+	}	
+
+	for (let invalidWebUri of InvalidWebUris) {
+	    it(`should throw for ${JSON.stringify(invalidWebUri)}`, () => {
+		const uriMarshaller = new WebUriMarshaller();
+
+		expect(() => uriMarshaller.extract(invalidWebUri)).to.throw('Not a valid http/https URI');
 	    });
 	}
     });
