@@ -60,21 +60,6 @@ export abstract class RaiseBuildFilterMarshaller<A, B> implements Marshaller<B> 
 }
 
 
-export class BooleanMarshaller implements Marshaller<boolean> {
-    extract(raw: any): boolean {
-	if (typeof raw !== 'boolean') {
-	    throw new ExtractError('Expected a boolean');
-	}
-
-	return raw;
-    }
-
-    pack(cooked: boolean): any {
-	return cooked;
-    }
-}
-
-
 export abstract class BaseNumberMarshaller<T> extends RaiseBuildFilterMarshaller<number, T> {
     raise(raw: any): number {
 	if (typeof raw !== 'number') {
