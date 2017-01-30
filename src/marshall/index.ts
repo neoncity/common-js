@@ -127,96 +127,100 @@ export class StringMarshaller extends BaseStringMarshaller<string> {
 }
 
 
-// export class OptionalMarshaller<T> implements Marshaller<T> {
-//     private _inner: Marshaller<T>;
+export class OptionalMarshaller<T> implements Marshaller<T|null> {
+    private _inner: Marshaller<T>;
 
-//     constructor(inner: Marshaller<T>) {
-// 	this._inner = inner;
-//     }
+    constructor(inner: Marshaller<T>) {
+	this._inner = inner;
+    }
 
-//     extract(raw: any): T {
-// 	return this._inner.extract(raw);
-//     }
+    extract(raw: any): T|null {
+	if (raw === null || raw === undefined) {
+	    return null;
+	}
 
-//     pack(cooked: T): any {
-// 	return this._inner.pack(cooked);
-//     }
-// }
+	return this._inner.extract(raw);
+    }
 
-
-// export class ArrayMarshaller<T extends Object> implements Marshaller<T[]> {
-//     private _inner: Marshaller<T>;
-
-//     constructor(inner: Marshaller<T>) {
-// 	this._inner = inner;
-//     }
-
-//     extract(raw: any): T[] {
-// 	if (!Array.isArray(raw)) {
-// 	    throw new ExtractError('Non-array input');
-// 	}
-
-// 	const cooked: T[] = [];
-
-// 	for (let elem of raw) {
-// 	    cooked.push(this._inner.extract(elem));
-// 	}
-
-// 	return cooked;
-//     }
-
-//     pack(cooked: T[]): any {
-// 	const raw: any[] = [];
-
-// 	for (let elem of cooked) {
-// 	    raw.push(this._inner.pack(elem));
-// 	}
-
-// 	return raw;
-//     }
-// }
+    pack(cooked: T|null): any {
+	return cooked;
+    }
+}
 
 
-// export type MarshalSchema<T extends Object> = {
-//     [key in keyof T]: Marshaller<any>
-// }
+export class ArrayMarshaller<T extends Object> implements Marshaller<T[]> {
+    private _inner: Marshaller<T>;
+
+    constructor(inner: Marshaller<T>) {
+	this._inner = inner;
+    }
+
+    extract(raw: any): T[] {
+	if (!Array.isArray(raw)) {
+	    throw new ExtractError('Non-array input');
+	}
+
+	const cooked: T[] = [];
+
+	for (let elem of raw) {
+	    cooked.push(this._inner.extract(elem));
+	}
+
+	return cooked;
+    }
+
+    pack(cooked: T[]): any {
+	const raw: any[] = [];
+
+	for (let elem of cooked) {
+	    raw.push(this._inner.pack(elem));
+	}
+
+	return raw;
+    }
+}
 
 
-// export class ObjectMarshaller<T extends Object> implements Marshaller<T> {
-//     private _schema: MarshalSchema<T>;
+export type MarshalSchema<T extends Object> = {
+    [key in keyof T]: Marshaller<any>
+}
 
-//     constructor(schema: MarshalSchema<T>) {
-//         this._schema = schema;
-//     }
 
-//     extract(raw: any): T {
-//         if (!(raw instanceof Object)) {
-//             throw new ExtractError('Non-object input');
-//         }
+export class ObjectMarshaller<T extends Object> implements Marshaller<T> {
+    private _schema: MarshalSchema<T>;
 
-//         // We're gonna build it to it's final form in a typesafe way here.
-//         const cooked = {} as T;
+    constructor(schema: MarshalSchema<T>) {
+        this._schema = schema;
+    }
 
-//         for (let propName in this._schema) {
-// 	    if (this._schema[propName] instanceof OptionalMarshaller && !raw.hasOwnProperty(propName)) {
-// 		continue;
-// 	    }
+    extract(raw: any): T {
+        if (!(raw instanceof Object)) {
+            throw new ExtractError('Non-object input');
+        }
+
+        // We're gonna build it to it's final form in a typesafe way here.
+        const cooked = {} as T;
+
+        for (let propName in this._schema) {
+	    if (this._schema[propName] instanceof OptionalMarshaller && !raw.hasOwnProperty(propName)) {
+		continue;
+	    }
 	    
-//             if (!raw.hasOwnProperty(propName)) {
-//                 throw new ExtractError(`Field ${propName} is missing`);
-//             }
+            if (!raw.hasOwnProperty(propName)) {
+                throw new ExtractError(`Field ${propName} is missing`);
+            }
 
-//             cooked[propName] = this._schema[propName].extract(raw[propName]);
-//         }
+            cooked[propName] = this._schema[propName].extract(raw[propName]);
+        }
 
-//         // This is where the schema 
-//         return cooked;
-//     }
+        // This is where the schema 
+        return cooked;
+    }
 
-//     pack(cooked: T): any {
-//         return cooked;
-//     }
-// }
+    pack(cooked: T): any {
+        return cooked;
+    }
+}
 
 
 // export abstract class ChainedMarshaller<T> implements Marshaller<T> {
