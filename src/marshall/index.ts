@@ -266,18 +266,24 @@ export type MarshalSchema<T extends Object> = {
 
 
 export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> {
+    private _prototype: any;
     private _schema: MarshalSchema<T>;
 
-    constructor(schema: MarshalSchema<T>) {
+    constructor(prototype: any, schema: MarshalSchema<T>) {
 	super();
+	this._prototype = prototype;
         this._schema = schema;
     }
 
     build(raw: MarshalObject): T {
         // We're gonna build it to it's final form in a typesafe way here.
-        const cooked = {} as T;
+        const cooked = Object.create(this._prototype);
 
         for (let propName in this._schema) {
+	    if (this._schema[propName] instanceof OptionalMarshaller && !raw.hasOwnProperty(propName)) {
+		continue;
+	    }
+	    
             if (!raw.hasOwnProperty(propName)) {
                 throw new ExtractError(`Field ${propName} is missing`);
             }
@@ -285,7 +291,7 @@ export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> 
             cooked[propName] = this._schema[propName].extract(raw[propName]);
         }
 
-        return cooked;
+        return cooked as T;
     }
 
     unbuild(cooked: T): MarshalObject {
@@ -301,4 +307,47 @@ export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> 
 
 	return b;
     }
+}
+
+
+export function OptionalOf<T>(marshallerCtor: new () => Marshaller<T>): new() => Marshaller<T|null> {
+    return class extends OptionalMarshaller<T> {
+	constructor() {
+	    super(new marshallerCtor());
+	}
+    };
+}
+
+
+export function ArrayOf<T>(marshallerCtor: new () => Marshaller<T>): new() => Marshaller<T[]> {
+    return class extends SingleArrayMarshaller<T> {
+	constructor() {
+	    super(new marshallerCtor());
+	}
+    };
+}
+
+
+export function MarshalWith<T>(marshallerCtor: new () => Marshaller<T>) {
+    return function(target: any, propertyKey: string) {
+	if (!target.hasOwnProperty('__schema')) {
+	    target.__schema = {};
+	}
+	
+	target.__schema[propertyKey] = new marshallerCtor();
+    }
+}
+
+
+export function MarshalFrom<T>(entity: any): new() => Marshaller<T> {
+    let schema = entity.prototype.__schema;
+    if (schema === undefined) {
+	schema = {} as MarshalSchema<T>;
+    }
+    
+    return class extends ObjectMarshaller<T> {
+	constructor() {
+	    super(entity.prototype, schema);
+	}
+    };
 }

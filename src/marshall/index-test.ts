@@ -1,7 +1,47 @@
-// import { ExtractError, Marshaller, ArrayMarshaller, ObjectMarshaller, OptionalMarshaller, MarshalSchema, StringMarshaller } from './index';
+import { ArrayOf, OptionalOf, MarshalWith, MarshalFrom, StringMarshaller } from './index';
 
-// import { IdMarshaller } from './id';
-// import { UriMarshaller } from './uri';
+import { IdMarshaller } from './id';
+import { UriMarshaller } from './uri';
+
+
+class ProfileData {
+    @MarshalWith(StringMarshaller)
+    name: string;
+
+    @MarshalWith(UriMarshaller)
+    bestFriend: string;
+}
+
+class User {
+    @MarshalWith(IdMarshaller)
+    id: number;
+
+    @MarshalWith(UriMarshaller)
+    pictureUrl: string;
+
+    @MarshalWith(MarshalFrom(ProfileData))
+    profileData: ProfileData;
+
+    @MarshalWith(OptionalOf(UriMarshaller))
+    bigProfileUrl?: string
+
+    @MarshalWith(OptionalOf(ArrayOf(IdMarshaller)))
+    friendIds: number[]
+
+    toString(): string {
+	return this.profileData.name;
+    }
+
+    getId(): number {
+	return this.id;
+    }
+}
+
+const userMarshaller = new (MarshalFrom<User>(User));
+const user:User = userMarshaller.extract({'id': 10, 'pictureUrl': 'http://hello.com', 'foo': 'bar', 'profileData': {'name': 'Horatio', 'bestFriend': 'http://hello.com/1'}, 'bigProfileUrl': null, 'friendIds': [1, 2]})
+
+console.log(user);
+console.log(user.toString());
 
 // function MarshalWith<T>(marshallerCtor: new () => Marshaller<T>) {
 //     return function(target: any, propertyKey: string) {
@@ -71,27 +111,3 @@
 // console.log(JSON.stringify(om.extract({'userId': 10, 'pictureUri': 'http://example.com', 'foo': 'bar', 'score': 10})));
 // console.log(JSON.stringify(lom.extract([{'userId': 10, 'pictureUri': 'http://example.com', 'foo': 'bar', 'score': 10},{'userId': 10, 'pictureUri': 'http://example.com', 'foo': 'bar'}])));
 
-
-class A {
-    foo() {
-        let proto = Object.getPrototypeOf(this);
-
-        while (proto != null && proto.hasOwnProperty('bar')) {
-            proto.bar();
-            proto = Object.getPrototypeOf(proto);
-        }
-    }
-
-    bar() {
-        console.log('A');
-    }
-}
-
-class B extends A {
-    bar() {
-        console.log('B');
-    }
-}
-
-const b = new B();
-b.foo();
