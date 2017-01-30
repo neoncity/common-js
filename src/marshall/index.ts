@@ -163,3 +163,77 @@ export class ObjectMarshaller<T extends Object> implements Marshaller<T> {
         return cooked;
     }
 }
+
+
+export abstract class ChainedMarshaller<T> implements Marshaller<T> {
+    extract(raw: any): T {
+    }
+
+    pack(cooked: T): any {
+    }
+
+    abstract linkExtract(raw: any): T {
+    }
+}
+
+
+//// --- exploration.
+
+
+interface Marshaller<T> {} // Something which marshalls from any to T
+
+// primitive & basic marshallers
+class BooleanMarshaller : Marshaller<boolean> {} // Marshalls from any to boolean
+class NumberMarshaller : Marshaller<number> {} // Marshalls from any to number
+class StringMarshaller : Marshaller<string> {} // Marshalls from any to string
+
+// composite marshallers
+class ArrayMarshaller<T>(inner: Marshaller<T>) : Marshaller<T[]> {} // Marshalls from any to T[]
+class OptionalMarshaller<T>(inner: Marshaller<T>): Marshaller<T|null> {} // Marshalls from any to T|null
+class ObjectMarshaller<T>(schema: MarshalSchema) : Marshaller<T> {} // Marshalls an any into an Object with a given structure
+
+class UriMarshaller : StringMarshaller {} // output is still string, so we can do
+UriMarshaller {
+    extract(raw: any): string => {const l = super.extract(raw); .... }
+    // but we'd actually like
+    extract(raw: string): string
+}
+
+//we could have
+class ChainedMarshaller<A, B> implements Marshaller<B> {
+    extract(raw: any): B => same as ChainedMarshaller
+    abstract raise(raw: any): A
+    step(a: A): B
+}
+
+class BaseStringMarshaller<T> implements ChainedMarshaller<string, T> {
+    raise() => do the string
+}
+
+class UriMarshaller extends BaseStringMarshaller<URI> {
+    step() => check it is an Uri
+}
+
+class WebUriMarshaller extends UriMarshaller {
+    step() => assert it is an http|https
+}
+
+class BaseNumberMarshaller<T> implements ChainedMarshaller<number, T> {
+    raise() => do the int
+}
+
+class DateMarshaller implements BaseNumberMarshaller<Date> {
+    step() => do the thing
+}
+
+// but perhaps, too much power?
+
+class User {
+    @Marshal(IdMarshaller)
+    id: number;
+    @Marshal(Optional(IdMarshaller))
+    fbId: number
+    @Marshal(Array(ProfilesMarshaller))
+    profiles: Profiles[]
+    @Marshal(Marshaller(User))
+}
