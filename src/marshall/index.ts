@@ -60,32 +60,6 @@ export abstract class RaiseBuildFilterMarshaller<A, B> implements Marshaller<B> 
 }
 
 
-export abstract class BaseNumberMarshaller<T> extends RaiseBuildFilterMarshaller<number, T> {
-    raise(raw: any): number {
-	if (typeof raw !== 'number') {
-	    throw new ExtractError('Expected a number');
-	}
-
-	return raw;
-    }
-
-    lower(a: number): any {
-	return a;
-    }
-}
-
-
-export class NumberMarshaller extends BaseNumberMarshaller<number> {
-    build(a: number): number {
-	return a;
-    }
-
-    unbuild(b: number): number {
-	return b;
-    }
-}
-
-
 export abstract class BaseStringMarshaller<T> extends RaiseBuildFilterMarshaller<string, T> {
     raise(raw: any): string {
 	if (typeof raw !== 'string') {
