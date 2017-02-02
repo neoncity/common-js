@@ -1,17 +1,13 @@
 import { ExtractError } from './index';
-import { BaseNumberMarshaller } from './number';
+import { IntegerMarshaller } from './number';
 
 
-export class IdMarshaller extends BaseNumberMarshaller<number> {
-    build(a: number): number {
-        if (a <= 0) {
-	    throw new ExtractError('Non-positive id');
-	}
+export class IdMarshaller extends IntegerMarshaller {
+    filter(b: number): number {
+        if (b <= 0) {
+            throw new ExtractError('Expected a positive integer');
+        }
 
-	return a;
-    }
-
-    unbuild(id: number): any {
-	return id;
+        return b;
     }
 }

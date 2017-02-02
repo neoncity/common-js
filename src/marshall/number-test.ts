@@ -84,6 +84,17 @@ describe('IntegerMarshaller', () => {
         1.3941e+3
     ];
 
+    const NonNumerics = [
+	null,
+	undefined,
+	'hello',
+	'100',
+	[],
+	[100],
+	{},
+	{hello: 100}
+    ];
+
     describe('extract', () => {
         for (let integer of Integers) {
             it(`should parse ${integer}`, () => {
@@ -100,6 +111,14 @@ describe('IntegerMarshaller', () => {
                 expect(() => integerMarshaller.extract(nonInteger)).to.throw('Expected an integer');
             });
         }
+
+        for (let nonNumeric of NonNumerics) {
+            it(`should throw for ${nonNumeric}`, () => {
+                const integerMarshaller = new IntegerMarshaller();
+
+                expect(() => integerMarshaller.extract(nonNumeric)).to.throw('Expected a number');
+            });
+        }        
     });
 
     describe('pack', () => {

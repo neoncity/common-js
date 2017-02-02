@@ -11,6 +11,17 @@ describe('IdMarshaller', () => {
 	23213131
     ];
 
+    const NonIds = [
+        0,
+        -1,
+        -312
+    ];
+
+    const NonIntegers = [
+        1.41,
+        -3.12
+    ];
+
     const NonNumerics = [
 	null,
 	undefined,
@@ -19,7 +30,7 @@ describe('IdMarshaller', () => {
 	[],
 	[100],
 	{},
-	{hello: 100}	
+	{hello: 100}
     ];
     
     describe('extract', () => {
@@ -31,6 +42,22 @@ describe('IdMarshaller', () => {
             });
 	}
 
+	for (let nonId of NonIds) {
+    	    it(`should throw for negative id ${nonId}`, () => {
+    		const idMarshaller = new IdMarshaller();
+
+    		expect(() => idMarshaller.extract(nonId)).to.throw('Expected a positive integer');
+    	    });
+	}
+
+	for (let nonInteger of NonIntegers) {
+    	    it(`should throw for float id ${nonInteger}`, () => {
+    		const idMarshaller = new IdMarshaller();
+
+    		expect(() => idMarshaller.extract(nonInteger)).to.throw('Expected an integer');
+    	    });
+	}        
+
 	for (let nonNumeric of NonNumerics) {
     	    it(`should throw for ${JSON.stringify(nonNumeric)}`, () => {
     		const idMarshaller = new IdMarshaller();
@@ -38,19 +65,6 @@ describe('IdMarshaller', () => {
     		expect(() => idMarshaller.extract(nonNumeric)).to.throw('Expected a number');
     	    });
 	}
-
-        it('should throw at id zero', () => {
-            const idMarshaller = new IdMarshaller();
-
-            expect(() => idMarshaller.extract(0)).to.throw('Non-positive id');
-        });
-
-        it('should throw at negative id', () => {
-            const idMarshaller = new IdMarshaller();
-
-            expect(() => idMarshaller.extract(-1)).to.throw('Non-positive id');
-            expect(() => idMarshaller.extract(-103)).to.throw('Non-positive id');
-        });
     });
 
     describe('pack', () => {
