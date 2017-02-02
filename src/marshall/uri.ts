@@ -1,19 +1,16 @@
 import { isUri, isWebUri } from 'valid-url'
 
-import { BaseStringMarshaller, ExtractError } from './index'
+import { ExtractError } from './index'
+import { StringMarshaller } from './string'
 
 
-export class UriMarshaller extends BaseStringMarshaller<string> {
-    build(a: string): string {
+export class UriMarshaller extends StringMarshaller {
+    filter(a: string): string {
 	if (!isUri(a)) {
-	    throw new ExtractError('Not a valid URI');
+	    throw new ExtractError('Expected an URI');
 	}
 
 	return a;
-    }
-
-    unbuild(uri: string): string {
-	return uri;
     }
 }
 
@@ -21,7 +18,7 @@ export class UriMarshaller extends BaseStringMarshaller<string> {
 export class WebUriMarshaller extends UriMarshaller {
     filter(uri: string): string {
 	if (!isWebUri(uri)) {
-	    throw new ExtractError('Not a valid http/https URI');
+	    throw new ExtractError('Expected an http/https URI');
 	}
 
 	return uri;
