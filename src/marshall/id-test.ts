@@ -65,7 +65,7 @@ describe('IdMarshaller', () => {
 
     describe('extract and pack', () => {
 	for (let id of Ids) {
-	    it(`should be opposites ${id}`, () => {
+	    it(`should be opposites for ${id}`, () => {
 		const idMarshaller = new IdMarshaller();
 
 		const raw = id;

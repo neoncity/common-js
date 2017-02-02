@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import 'mocha'
 
-import { NumberMarshaller, IntegerMarshaller } from './boolean';
+import { IntegerMarshaller, NumberMarshaller } from './number';
 
 
 describe('NumberMarshaller', () => {
@@ -27,24 +27,102 @@ describe('NumberMarshaller', () => {
     ];
 
     describe('extract', () => {
-        it('should parse true', () => {
-            const booleanMarshaller = new BooleanMarshaller();
+        for (let number of Numbers) {
+            it(`should parse ${number}`, () => {
+                const numberMarshaller = new NumberMarshaller();
 
-            expect(booleanMarshaller.extract(true)).to.be.true;
-        });
-
-        it('should parse false', () => {
-            const booleanMarshaller = new BooleanMarshaller();
-
-            expect(booleanMarshaller.extract(false)).to.be.false;
-        });
-
-        for (let nonBoolean of NonBooleans) {
-            it(`should throw for ${JSON.stringify(nonBoolean)}`, () => {
-                const booleanMarshaller = new BooleanMarshaller();
-
-                expect(() => booleanMarshaller.extract(nonBoolean)).to.throw('Expected a boolean');
+                expect(numberMarshaller.extract(number)).to.equal(number);
             });
         }
-    });   
+
+        for (let nonNumber of NonNumbers) {
+            it(`should throw for ${JSON.stringify(nonNumber)}`, () => {
+                const numberMarshaller = new NumberMarshaller();
+
+                expect(() => numberMarshaller.extract(nonNumber)).to.throw('Expected a number');
+            });
+        }
+    });
+
+    describe('pack', () => {
+        for (let number of Numbers) {
+            it(`should produce the same input for ${number}`, () => {
+                const numberMarshaller = new NumberMarshaller();
+
+                expect(numberMarshaller.pack(number)).to.equal(number);
+            });
+        }
+    });
+
+    describe('extract and pack', () => {
+        for (let number of Numbers) {
+            it(`should be opposites for ${number}`, () => {
+                const numberMarshaller = new NumberMarshaller();
+
+                const raw = number;
+		const extracted = numberMarshaller.extract(raw);
+		const packed = numberMarshaller.pack(extracted);
+
+		expect(packed).to.equal(raw);
+            });
+        }
+    });
+});
+
+
+describe('IntegerMarshaller', () => {
+    const Integers = [
+        1,
+        3
+        -5,
+        20
+    ];
+
+    const NonIntegers = [
+        1.2,
+        -3.14,
+        1.3941e+3
+    ];
+
+    describe('extract', () => {
+        for (let integer of Integers) {
+            it(`should parse ${integer}`, () => {
+                const integerMarshaller = new IntegerMarshaller();
+
+                expect(integerMarshaller.extract(integer)).to.equal(integer);
+            });
+        }
+
+        for (let nonInteger of NonIntegers) {
+            it(`should throw for ${nonInteger}`, () => {
+                const integerMarshaller = new IntegerMarshaller();
+
+                expect(() => integerMarshaller.extract(nonInteger)).to.throw('Expected an integer');
+            });
+        }
+    });
+
+    describe('pack', () => {
+        for (let integer of Integers) {
+            it(`should produce the same input for ${integer}`, () => {
+                const integerMarshaller = new IntegerMarshaller();
+
+                expect(integerMarshaller.pack(integer)).to.equal(integer);
+            });
+        }
+    });
+
+    describe('extract and pack', () => {
+        for (let integer of Integers) {
+            it(`should be opposites for ${integer}`, () => {
+                const integerMarshaller = new IntegerMarshaller();
+
+                const raw = integer;
+		const extracted = integerMarshaller.extract(raw);
+		const packed = integerMarshaller.pack(extracted);
+
+		expect(packed).to.equal(raw);
+            });
+        }
+    });
 });

@@ -29,7 +29,7 @@ export class NumberMarshaller extends BaseNumberMarshaller<number> {
 
 export class IntegerMarshaller extends NumberMarshaller {
     filter(b: number): number {
-        if (!b.isInteger()) {
+        if (!Number.isInteger(b)) {
             throw new ExtractError('Expected an integer');
         }
 

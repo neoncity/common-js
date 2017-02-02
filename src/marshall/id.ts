@@ -1,4 +1,5 @@
-import { BaseNumberMarshaller, ExtractError } from './index';
+import { ExtractError } from './index';
+import { BaseNumberMarshaller } from './number';
 
 
 export class IdMarshaller extends BaseNumberMarshaller<number> {

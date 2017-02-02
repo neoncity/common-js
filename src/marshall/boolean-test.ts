@@ -37,5 +37,33 @@ describe('BooleanMarshaller', () => {
                 expect(() => booleanMarshaller.extract(nonBoolean)).to.throw('Expected a boolean');
             });
         }
-    });   
+    });
+
+    describe('pack', () => {
+        it('should pack true', () => {
+            const booleanMarshaller = new BooleanMarshaller();
+
+            expect(booleanMarshaller.pack(true)).to.be.true;
+        });
+
+        it('should pack false', () => {
+            const booleanMarshaller = new BooleanMarshaller();
+
+            expect(booleanMarshaller.pack(false)).to.be.false;
+        });
+    });
+
+    describe('extract and pack', () => {
+        for (let bool of [true, false]) {
+            it(`should be opposites for ${bool}`, () => {
+                const booleanMarshaller = new BooleanMarshaller();
+
+                const raw = bool;
+                const extracted = booleanMarshaller.extract(raw);
+                const packed = booleanMarshaller.pack(extracted);
+
+                expect(packed).to.equal(raw);
+            });
+        }
+    });
 });
