@@ -25,6 +25,9 @@ describe('TimeMarshaller', () => {
     const NonDatesTs = [
 	null,
 	undefined,
+	NaN,
+	Number.POSITIVE_INFINITY,
+	Number.NEGATIVE_INFINITY,
 	'hello',
 	'100',
 	[],

@@ -25,6 +25,9 @@ describe('IdMarshaller', () => {
     const NonNumerics = [
 	null,
 	undefined,
+	NaN,
+	Number.POSITIVE_INFINITY,
+	Number.NEGATIVE_INFINITY,
 	'hello',
 	'100',
 	[],

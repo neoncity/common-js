@@ -46,6 +46,9 @@ describe('UriMarshaller', () => {
     const NonStrings = [
 	null,
 	undefined,
+	NaN,
+	Number.POSITIVE_INFINITY,
+	Number.NEGATIVE_INFINITY,
 	100,
 	-20,
 	[],

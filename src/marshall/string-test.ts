@@ -15,6 +15,9 @@ describe('StringMarshaller', () => {
     const NonStrings = [
 	null,
 	undefined,
+	NaN,
+	Number.POSITIVE_INFINITY,
+	Number.NEGATIVE_INFINITY,
         true,
         false,
         100,

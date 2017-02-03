@@ -16,6 +16,9 @@ describe('NumberMarshaller', () => {
     const NonNumbers = [
 	null,
 	undefined,
+	NaN,
+	Number.POSITIVE_INFINITY,
+	Number.NEGATIVE_INFINITY,
         true,
         false,
 	'hello',
@@ -87,6 +90,9 @@ describe('IntegerMarshaller', () => {
     const NonNumerics = [
 	null,
 	undefined,
+	NaN,
+	Number.POSITIVE_INFINITY,
+	Number.NEGATIVE_INFINITY,
 	'hello',
 	'100',
 	[],

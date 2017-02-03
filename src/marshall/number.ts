@@ -7,6 +7,10 @@ export abstract class BaseNumberMarshaller<T> extends RaiseBuildFilterMarshaller
 	    throw new ExtractError('Expected a number');
 	}
 
+	if (Number.isNaN(raw) || raw == Number.POSITIVE_INFINITY || raw == Number.NEGATIVE_INFINITY) {
+	    throw new ExtractError('Expected a number');
+	}
+
 	return raw;
     }
 
