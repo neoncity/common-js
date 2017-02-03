@@ -105,7 +105,7 @@ describe('IntegerMarshaller', () => {
         }
 
         for (let nonInteger of NonIntegers) {
-            it(`should throw for ${nonInteger}`, () => {
+            it(`should throw for float ${nonInteger}`, () => {
                 const integerMarshaller = new IntegerMarshaller();
 
                 expect(() => integerMarshaller.extract(nonInteger)).to.throw('Expected an integer');
