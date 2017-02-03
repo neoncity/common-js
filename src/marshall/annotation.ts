@@ -1,6 +1,6 @@
 import { SingleArrayMarshaller } from './array'
 import { Marshaller } from './index'
-import { MarshalSchema, ObjectMarshaller } from './object'
+import { MapMarshaller, MarshalMap, MarshalSchema, ObjectMarshaller } from './object'
 import { OptionalMarshaller } from './optional'
 
 
@@ -15,6 +15,15 @@ export function OptionalOf<T>(marshallerCtor: new () => Marshaller<T>): new() =>
 
 export function ArrayOf<T>(marshallerCtor: new () => Marshaller<T>): new() => Marshaller<T[]> {
     return class extends SingleArrayMarshaller<T> {
+	constructor() {
+	    super(new marshallerCtor());
+	}
+    };
+}
+
+
+export function MapOf<T>(marshallerCtor: new () => Marshaller<T>): new() => Marshaller<MarshalMap<T>> {
+    return class extends MapMarshaller<T> {
 	constructor() {
 	    super(new marshallerCtor());
 	}
