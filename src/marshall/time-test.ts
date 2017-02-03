@@ -11,7 +11,18 @@ describe('TimeMarshaller', () => {
 	Date.UTC(2017, 1, 17, 11, 22, 33, 123)
     ];
 
-    const NonNumerics = [
+    const NonPositiveTs = [
+        -4,
+        -3,
+	-1
+    ];
+
+    const NonIntegers = [
+	3.15,
+        -4.1231
+    ];
+
+    const NonDatesTs = [
 	null,
 	undefined,
 	'hello',
@@ -31,20 +42,29 @@ describe('TimeMarshaller', () => {
             });
 	}
 
-	for (let nonNumeric of NonNumerics) {
-    	    it(`should throw for ${JSON.stringify(nonNumeric)}`, () => {
-    		const timeMarshaller = new TimeMarshaller();
+	for (let nonPositiveTs of NonPositiveTs) {
+	    it(`should throw for negative ${nonPositiveTs}`, () => {
+		const timeMarshaller = new TimeMarshaller();
 
-    		expect(() => timeMarshaller.extract(nonNumeric)).to.throw('Expected a number');
-    	    });
+		expect(() => timeMarshaller.extract(nonPositiveTs)).to.throw('Expected a positive timestamp');
+	    });
 	}
 
-        it('should throw at negative time', () => {
-            const timeMarshaller = new TimeMarshaller();
+	for (let nonInteger of NonIntegers) {
+	    it(`should throw for float ${nonInteger}`, () => {
+		const timeMarshaller = new TimeMarshaller();
 
-            expect(() => timeMarshaller.extract(-1)).to.throw('Non-positive time');
-            expect(() => timeMarshaller.extract(-103)).to.throw('Non-positive time');
-        });
+		expect(() => timeMarshaller.extract(nonInteger)).to.throw('Expected an integer');
+	    });
+	}
+
+	for (let nonDateTs of NonDatesTs) {
+    	    it(`should throw for ${JSON.stringify(nonDateTs)}`, () => {
+    		const timeMarshaller = new TimeMarshaller();
+
+    		expect(() => timeMarshaller.extract(nonDateTs)).to.throw('Expected a number');
+    	    });
+	}
     });
 
     describe('pack', () => {
