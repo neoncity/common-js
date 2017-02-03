@@ -4,7 +4,7 @@ import { ExtractError, Marshaller, RaiseBuildFilterMarshaller } from './index'
 export abstract class BaseArrayMarshaller<T> extends RaiseBuildFilterMarshaller<any[], T[]> {
     raise(raw: any): any[] {
 	if (!Array.isArray(raw)) {
-	    throw new ExtractError('Non-array input');
+	    throw new ExtractError('Expected an array');
 	}
 
 	return raw;
