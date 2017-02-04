@@ -9,8 +9,8 @@ export type MarshalObject = {
 
 export abstract class BaseObjectMarshaller<T extends Object> extends RaiseBuildFilterMarshaller<MarshalObject, T> {
     raise(raw: any): MarshalObject {
-        if (!(raw instanceof Object)) {
-            throw new ExtractError('Non-object input');
+        if (!(raw != null && typeof raw === 'object' && !Array.isArray(raw))) {
+            throw new ExtractError('Expected an object');
         }
 
 	return raw;
@@ -27,7 +27,7 @@ export type MarshalMap<K> = {
 }
 
 
-export abstract class MapMarshaller<K> extends BaseObjectMarshaller<MarshalMap<K>> {
+export class SingleMapMarshaller<K> extends BaseObjectMarshaller<MarshalMap<K>> {
     private _inner: Marshaller<K>;
 
     constructor(inner: Marshaller<K>) {
