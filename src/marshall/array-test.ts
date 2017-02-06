@@ -1,11 +1,11 @@
 import { expect } from 'chai'
 import 'mocha'
 
-import { ArrayMarshaller, SingleArrayMarshaller } from './array'
+import { UntypedArrayMarshaller, ArrayMarshaller } from './array'
 import { BooleanMarshaller } from './boolean'
 
 
-describe('ArrayMarshaller', () => {
+describe('UntypedArrayMarshaller', () => {
     const Arrays = [
         [],
         [1],
@@ -34,7 +34,7 @@ describe('ArrayMarshaller', () => {
     describe('extract', () => {
         for (let array of Arrays) {
             it(`should extract ${JSON.stringify(array)}`, () => {
-                const arrayMarshaller = new ArrayMarshaller();
+                const arrayMarshaller = new UntypedArrayMarshaller();
 
                 expect(arrayMarshaller.extract(array)).to.eql(array);
             });
@@ -42,7 +42,7 @@ describe('ArrayMarshaller', () => {
 
         for (let nonArray of NonArrays) {
             it(`should throw for non-array ${JSON.stringify(nonArray)}`, () => {
-                const arrayMarshaller = new ArrayMarshaller();
+                const arrayMarshaller = new UntypedArrayMarshaller();
 
                 expect(() => arrayMarshaller.extract(nonArray)).to.throw('Expected an array');
             });
@@ -52,7 +52,7 @@ describe('ArrayMarshaller', () => {
     describe('pack', () => {
         for (let array of Arrays) {
             it(`should produce the same input for ${JSON.stringify(array)}`, () => {
-                const arrayMarshaller = new ArrayMarshaller();
+                const arrayMarshaller = new UntypedArrayMarshaller();
 
                 expect(arrayMarshaller.pack(array)).to.eql(array);
             });
@@ -62,7 +62,7 @@ describe('ArrayMarshaller', () => {
     describe('extract and pack', () => {
         for (let array of Arrays) {
             it(`should be opposites for ${array}`, () => {
-                const arrayMarshaller = new ArrayMarshaller();
+                const arrayMarshaller = new UntypedArrayMarshaller();
 
                 const raw = array;
 		const extracted = arrayMarshaller.extract(raw);
@@ -75,7 +75,7 @@ describe('ArrayMarshaller', () => {
 });
 
 
-describe('SingleArrayMarshaller', () => {
+describe('ArrayMarshaller', () => {
     const BooleanArrays = [
         [],
         [true, false],
@@ -109,7 +109,7 @@ describe('SingleArrayMarshaller', () => {
         for (let booleanArray of BooleanArrays) {
             it(`should parse ${JSON.stringify(booleanArray)}`, () => {
                 const booleanMarshaller = new BooleanMarshaller();
-                const arrayMarshaller = new SingleArrayMarshaller(booleanMarshaller);
+                const arrayMarshaller = new ArrayMarshaller(booleanMarshaller);
 
                 expect(arrayMarshaller.extract(booleanArray)).to.eql(booleanArray);
             });
@@ -118,7 +118,7 @@ describe('SingleArrayMarshaller', () => {
         for (let heterogenousArray of HeterogenousArrays) {
             it(`should throw for heterogenous array ${JSON.stringify(heterogenousArray)}`, () => {
                 const booleanMarshaller = new BooleanMarshaller();
-                const arrayMarshaller = new SingleArrayMarshaller(booleanMarshaller);
+                const arrayMarshaller = new ArrayMarshaller(booleanMarshaller);
 
                 expect(() => arrayMarshaller.extract(heterogenousArray)).to.throw('Expected a boolean');
             });
@@ -127,7 +127,7 @@ describe('SingleArrayMarshaller', () => {
         for (let nonArray of NonArrays) {
             it(`should throw for non-array ${JSON.stringify(nonArray)}`, () => {
                 const booleanMarshaller = new BooleanMarshaller();
-                const arrayMarshaller = new SingleArrayMarshaller(booleanMarshaller);
+                const arrayMarshaller = new ArrayMarshaller(booleanMarshaller);
 
                 expect(() => arrayMarshaller.extract(nonArray)).to.throw('Expected an array');
             });
@@ -138,7 +138,7 @@ describe('SingleArrayMarshaller', () => {
         for (let booleanArray of BooleanArrays) {
             it(`should produce the same input for ${JSON.stringify(booleanArray)}`, () => {
                 const booleanMarshaller = new BooleanMarshaller();
-                const arrayMarshaller = new SingleArrayMarshaller(booleanMarshaller);
+                const arrayMarshaller = new ArrayMarshaller(booleanMarshaller);
 
                 expect(arrayMarshaller.pack(booleanArray)).to.eql(booleanArray);
             });
@@ -149,7 +149,7 @@ describe('SingleArrayMarshaller', () => {
         for (let booleanArray of BooleanArrays) {
             it(`should be opposites for ${booleanArray}`, () => {
                 const booleanMarshaller = new BooleanMarshaller();
-                const arrayMarshaller = new SingleArrayMarshaller(booleanMarshaller);
+                const arrayMarshaller = new ArrayMarshaller(booleanMarshaller);
 
                 const raw = booleanArray;
 		const extracted = arrayMarshaller.extract(raw);

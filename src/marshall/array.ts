@@ -16,7 +16,7 @@ export abstract class BaseArrayMarshaller<T> extends RaiseBuildFilterMarshaller<
 }
 
 
-export class ArrayMarshaller extends BaseArrayMarshaller<any> {
+export class UntypedArrayMarshaller extends BaseArrayMarshaller<any> {
     build(a: any[]) {
 	return a;
     }
@@ -27,7 +27,7 @@ export class ArrayMarshaller extends BaseArrayMarshaller<any> {
 }
 
 
-export class SingleArrayMarshaller<T> extends BaseArrayMarshaller<T> {
+export class ArrayMarshaller<T> extends BaseArrayMarshaller<T> {
     private _inner: Marshaller<T>;
 
     constructor(inner: Marshaller<T>) {
