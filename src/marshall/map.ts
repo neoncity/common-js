@@ -2,6 +2,22 @@ import { Marshaller } from './index'
 import { BaseObjectMarshaller, MarshalObject } from './object'
 
 
+export type UntypedMarshalMap = {
+    [key: string]: any
+}
+
+
+export class UntypedMapMarshaller extends BaseObjectMarshaller<UntypedMarshalMap> {
+    build(a: MarshalObject): UntypedMarshalMap {
+	return a;
+    }
+
+    unbuild(cooked: UntypedMarshalMap): MarshalObject {
+	return cooked;
+    }
+}
+
+
 export type MarshalMap<K> = {
     [key: string]: K
 }
