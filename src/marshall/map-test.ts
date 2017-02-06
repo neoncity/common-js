@@ -28,7 +28,7 @@ describe('UntypedMapMarshaller', () => {
 	'hello',
 	'100',
 	[],
-	[true, true, false]      
+	[true, true, false]
     ];
 
     describe('extract', () => {

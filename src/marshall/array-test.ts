@@ -61,7 +61,7 @@ describe('UntypedArrayMarshaller', () => {
 
     describe('extract and pack', () => {
         for (let array of Arrays) {
-            it(`should be opposites for ${array}`, () => {
+            it(`should be opposites for ${JSON.stringify(array)}`, () => {
                 const arrayMarshaller = new UntypedArrayMarshaller();
 
                 const raw = array;

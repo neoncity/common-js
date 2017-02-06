@@ -22,6 +22,17 @@ export abstract class BaseObjectMarshaller<T extends Object> extends RaiseBuildF
 }
 
 
+export class UntypedObjectMarshaller extends BaseObjectMarshaller<Object> {
+    build(raw: MarshalObject): Object {
+	return raw;
+    }
+
+    unbuild(cooked: Object): MarshalObject {
+	return cooked;
+    }
+}
+
+
 export type MarshalSchema<T extends Object> = {
     [key in keyof T]: Marshaller<any>
 }
