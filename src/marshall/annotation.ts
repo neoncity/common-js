@@ -1,6 +1,7 @@
 import { ArrayMarshaller } from './array'
 import { Marshaller } from './index'
-import { MapMarshaller, MarshalMap, MarshalSchema, ObjectMarshaller } from './object'
+import { MapMarshaller, MarshalMap } from './map'
+import { MarshalSchema, ObjectMarshaller } from './object'
 import { OptionalMarshaller } from './optional'
 
 
