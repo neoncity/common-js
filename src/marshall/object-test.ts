@@ -1,7 +1,9 @@
 import { expect } from 'chai'
 import 'mocha'
 
+import { NumberMarshaller } from './number'
 import { UntypedObjectMarshaller } from './object'
+import * as a from './annotation'
 
 
 describe('UntypedObjectMarshaller', () => {
@@ -84,4 +86,49 @@ describe('UntypedObjectMarshaller', () => {
 	    });
 	}
     });    
+});
+
+
+describe('ObjectMarshaller', () => {
+    class Point {
+        @a.MarshalWith(NumberMarshaller)
+        x: number;
+//        @a.MarshalWith(NumberMarshaller)
+        y: number;
+
+        constructor(x: number, y: number) {
+            this.x = x;
+            this.y = y;
+        }
+
+        coordsSum(): number {
+            return this.x + this.y;
+        }
+    }
+
+    const Objects = [
+        [{x: 10, y: 20}, new Point(10, 20), 30],
+        [{x: 11, y: 22}, new Point(11, 22), 33]
+    ];
+
+    // const PointsSchema = {
+    //     x: new NumberMarshaller(),
+    //     y: new NumberMarshaller()
+    // };
+    
+    describe('extract', () => {
+        for (let [raw, object, coordsSum] of Objects) {
+            it(`should extract ${JSON.stringify(object)}`, () => {
+                const oo = new (a.MarshalFrom<Point>(Point));
+                // const objectMarshaller = new ObjectMarshaller<Point>(Point, PointsSchema);
+                const extracted: Point = oo.extract(raw);
+
+                console.log(extracted);
+
+                expect(extracted).to.be.an.instanceof(Point);
+                expect(extracted).to.eql(object);
+                expect(extracted.coordsSum()).to.eql(coordsSum);
+            });
+        }
+    });
 });

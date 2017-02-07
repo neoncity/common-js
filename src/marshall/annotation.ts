@@ -51,7 +51,7 @@ export function MarshalFrom<T>(entity: any): new() => Marshaller<T> {
     
     return class extends ObjectMarshaller<T> {
 	constructor() {
-	    super(entity.prototype, schema);
+	    super(entity.prototype, schema as MarshalSchema<T>);
 	}
     };
 }
