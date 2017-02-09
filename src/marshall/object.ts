@@ -34,7 +34,7 @@ export class UntypedObjectMarshaller extends BaseObjectMarshaller<Object> {
 
 
 export type MarshalSchema<T extends Object> = {
-    [key in keyof T]: Marshaller<any>
+    [key in keyof T]: Marshaller<T[key]>
 }
 
 
@@ -46,11 +46,13 @@ export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> 
 	super();
 	this._prototype = prototype;
         this._schema = schema;
+        for (let v of Object.getOwnPropertyNames(prototype.prototype))
+            console.log(v)
     }
 
     build(raw: MarshalObject): T {
         // We're gonna build it to it's final form in a typesafe way here.
-        const cooked = Object.create(this._prototype);
+        const cooked = new this._prototype();
 
         for (let propName in this._schema) {
 	    if (this._schema[propName] instanceof OptionalMarshaller && !raw.hasOwnProperty(propName)) {
