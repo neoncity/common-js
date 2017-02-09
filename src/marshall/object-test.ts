@@ -1,10 +1,8 @@
 import { expect } from 'chai'
 import 'mocha'
 
-import { OptionalMarshaller } from './optional'
 import { NumberMarshaller } from './number'
 import { ObjectMarshaller, UntypedObjectMarshaller, MarshalSchema } from './object'
-//import * as a from './annotation'
 
 
 describe('UntypedObjectMarshaller', () => {
@@ -92,9 +90,7 @@ describe('UntypedObjectMarshaller', () => {
 
 describe('ObjectMarshaller', () => {
     class Point {
-        //@a.MarshalWith(NumberMarshaller)
         x: number;
-        //@a.MarshalWith(NumberMarshaller)
         y: number;
 
         constructor(x: number, y: number) {
@@ -115,13 +111,11 @@ describe('ObjectMarshaller', () => {
     const PointsSchema: MarshalSchema<Point> = {
         x: new NumberMarshaller(),
         y: new NumberMarshaller()
-        //coordsSum: new OptionalMarshaller(new NumberMarshaller())
     };
     
     describe('extract', () => {
-        for (let [raw, object, _] of Objects) {
+        for (let [raw, object, coordsSum] of Objects) {
             it(`should extract ${JSON.stringify(object)}`, () => {
-                // const oo = new (a.MarshalFrom<Point>(Point));
                 const objectMarshaller = new ObjectMarshaller<Point>(Point, PointsSchema);
                 const extracted: Point = objectMarshaller.extract(raw);
 
@@ -129,7 +123,7 @@ describe('ObjectMarshaller', () => {
 
                 expect(extracted).to.be.an.instanceof(Point);
                 expect(extracted).to.eql(object);
-                //expect(extracted.coordsSum()).to.eql(coordsSum);
+                expect(extracted.coordsSum()).to.eql(coordsSum);
             });
         }
     });

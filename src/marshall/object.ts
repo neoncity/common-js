@@ -34,7 +34,7 @@ export class UntypedObjectMarshaller extends BaseObjectMarshaller<Object> {
 
 
 export type MarshalSchema<T extends Object> = {
-    [key in keyof T]: Marshaller<T[key]>
+    [key in keyof T]?: Marshaller<T[key]>
 }
 
 
@@ -43,11 +43,15 @@ export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> 
     private _schema: MarshalSchema<T>;
 
     constructor(prototype: any, schema: MarshalSchema<T>) {
+	for (let propName in schema) {
+	    if (typeof schema[propName] == 'undefined') {
+		throw new ExtractError(`Cannot accept undefined as a marshaller for ${propName}`);
+	    }
+	}
+
 	super();
 	this._prototype = prototype;
         this._schema = schema;
-        for (let v of Object.getOwnPropertyNames(prototype.prototype))
-            console.log(v)
     }
 
     build(raw: MarshalObject): T {
@@ -55,7 +59,13 @@ export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> 
         const cooked = new this._prototype();
 
         for (let propName in this._schema) {
-	    if (this._schema[propName] instanceof OptionalMarshaller && !raw.hasOwnProperty(propName)) {
+	    const marshaller = this._schema[propName];
+
+	    if (typeof marshaller == 'undefined') {
+		throw new Error('Should never happen');
+	    }
+	    
+	    if (marshaller instanceof OptionalMarshaller && !raw.hasOwnProperty(propName)) {
 		continue;
 	    }
 	    
@@ -63,7 +73,7 @@ export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> 
                 throw new ExtractError(`Field ${propName} is missing`);
             }
 
-            cooked[propName] = this._schema[propName].extract(raw[propName]);
+	    cooked[propName] = marshaller.extract(raw[propName]);
         }
 
         return cooked as T;
@@ -73,11 +83,17 @@ export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> 
 	const b: MarshalObject = {};
 
 	for (let propName in this._schema) {
+	    const marshaller = this._schema[propName];
+
+	    if (typeof marshaller == 'undefined') {
+		throw new ExtractError('Should never happen');
+	    }
+	    
 	    if (!cooked.hasOwnProperty(propName)) {
 		throw new PackError(`Field ${propName} is missing`);
 	    }
 
-	    b[propName] = this._schema[propName].pack(cooked[propName]);
+	    b[propName] = marshaller.pack(cooked[propName]);
 	}
 
 	return b;
