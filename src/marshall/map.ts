@@ -24,7 +24,7 @@ export type MarshalMap<K> = {
 
 
 export class MapMarshaller<K> extends BaseObjectMarshaller<MarshalMap<K>> {
-    private _inner: Marshaller<K>;
+    private readonly _inner: Marshaller<K>;
 
     constructor(inner: Marshaller<K>) {
 	super();

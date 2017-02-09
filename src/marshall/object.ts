@@ -34,13 +34,13 @@ export class UntypedObjectMarshaller extends BaseObjectMarshaller<Object> {
 
 
 export type MarshalSchema<T extends Object> = {
-    [key in keyof T]?: Marshaller<T[key]>
+    readonly [key in keyof T]?: Marshaller<T[key]>
 }
 
 
 export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> {
-    private _prototype: any;
-    private _schema: MarshalSchema<T>;
+    private readonly _prototype: any;
+    private readonly _schema: MarshalSchema<T>;
 
     constructor(prototype: any, schema: MarshalSchema<T>) {
 	for (let propName in schema) {
