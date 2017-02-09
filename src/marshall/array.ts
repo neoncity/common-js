@@ -28,7 +28,7 @@ export class UntypedArrayMarshaller extends BaseArrayMarshaller<any> {
 
 
 export class ArrayMarshaller<T> extends BaseArrayMarshaller<T> {
-    private _inner: Marshaller<T>;
+    private readonly _inner: Marshaller<T>;
 
     constructor(inner: Marshaller<T>) {
 	super();

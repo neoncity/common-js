@@ -117,6 +117,12 @@ describe('ObjectMarshaller', () => {
         [{x: 12, y: 24, z: 36}, new Point(12, 24), 36]
     ];
 
+    const NonPoints = [
+        [{x: 10}, 'Field y is missing'],
+        [{y: 20}, 'Field x is missing'],
+        [{x: 'hello'}, 'Expected a number']
+    ];
+
     class User {
 	id: number;
 	name: string;
@@ -154,6 +160,33 @@ describe('ObjectMarshaller', () => {
 	[{id: 3, name: 'Harry', age: 24, homePosition: {x: 100, y: 300}, money: 1000},
 	 new User(3, 'Harry', 24, new Point(100, 300))],	
     ];
+
+    const NonUsers = [
+        [{id: 1, name: 'John', age: 21},
+         'Field homePosition is missing'],
+        [{id: 'hello', name: 'John', age: 21, homePosition: {x: 0, y: 20}},
+         'Expected a number'],
+        [{id: 1, name: 'John', age: 21, homePosition: 10},
+         'Expected an object'],
+        [{id: 1, name: 'John', age: 21, homePosition: {x: 0}},
+         'Field y is missing']
+    ];
+
+    const NonObjects = [
+        10,
+        31.23,
+	null,
+	undefined,
+	NaN,
+	Number.POSITIVE_INFINITY,
+	Number.NEGATIVE_INFINITY,
+        true,
+        false,
+	'hello',
+	'100',
+	[],
+	[true, true, false]
+    ];
     
     describe('extract', () => {
         for (let [raw, point, coordsSum] of Points) {
@@ -176,5 +209,31 @@ describe('ObjectMarshaller', () => {
                 expect(extracted).to.eql(user);
 	    });
 	}
+
+        for (let [raw, message] of NonPoints) {
+            it(`should throw for non-point ${JSON.stringify(raw)}`, () => {
+                const pointMarshaller = new ObjectMarshaller<Point>(Point, PointSchema);
+
+                expect(() => pointMarshaller.extract(raw)).to.throw(message as string);
+            });
+        }
+
+        for (let [raw, message] of NonUsers) {
+            it(`should throw for non-user ${JSON.stringify(raw)}`, () => {
+                const userMarshaller = new ObjectMarshaller<User>(User, UserSchema);
+
+                expect(() => userMarshaller.extract(raw)).to.throw(message as string);
+            });
+        }
+
+        for (let nonObject of NonObjects) {
+            it(`should throw for ${JSON.stringify(nonObject)}`, () => {
+                const pointMarshaller = new ObjectMarshaller<Point>(Point, PointSchema);
+                const userMarshaller = new ObjectMarshaller<User>(User, UserSchema);
+
+                expect(() => pointMarshaller.extract(nonObject)).to.throw('Expected an object');
+                expect(() => userMarshaller.extract(nonObject)).to.throw('Expected an object');
+            });
+        }
     });
 });
