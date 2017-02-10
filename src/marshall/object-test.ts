@@ -187,6 +187,12 @@ describe('ObjectMarshaller', () => {
 	[],
 	[true, true, false]
     ];
+
+    describe('constructor', () => {
+	it(`should throw for undefined marshaller`, () => {
+	    expect(() => new ObjectMarshaller<Point>(Point, {x: undefined})).to.throw('Cannot accept undefined as a marshaller for x');
+	});
+    });
     
     describe('extract', () => {
         for (let [raw, point, coordsSum] of Points) {
