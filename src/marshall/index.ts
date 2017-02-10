@@ -14,14 +14,6 @@ export class ExtractError extends MarshallError {
 }
 
 
-export class PackError extends MarshallError {
-    constructor(message: string) {
-	super(message);
-	this.name = 'PackError';
-    }
-}
-
-
 export interface Marshaller<T> {
     extract(raw: any): T;
     pack(cooked: T): any;
