@@ -241,6 +241,15 @@ describe('ObjectMarshaller', () => {
                 expect(() => userMarshaller.extract(nonObject)).to.throw('Expected an object');
             });
         }
+
+        it(`should throw when a marshaller becomes undefined`, () => {
+            const newSchema = Object.assign({}, PointSchema);
+            const pointMarshaller = new ObjectMarshaller<Point>(Point, newSchema);
+            const modifiableSchema = newSchema as any;
+            modifiableSchema.y = undefined;
+
+            expect(() => pointMarshaller.extract(Points[0][0] as any)).to.throw('Should never happen');
+        });
     });
 
     describe('pack', () => {
@@ -270,6 +279,15 @@ describe('ObjectMarshaller', () => {
 		}
 	    });
 	}
+
+        it(`should throw when a marshaller becomes undefined`, () => {
+            const newSchema = Object.assign({}, PointSchema);
+            const pointMarshaller = new ObjectMarshaller<Point>(Point, newSchema);
+            const modifiableSchema = newSchema as any;
+            modifiableSchema.y = undefined;
+
+            expect(() => pointMarshaller.pack(Points[0][1] as Point)).to.throw('Should never happen');
+        });        
     });
 
     describe('extract and pack', () => {

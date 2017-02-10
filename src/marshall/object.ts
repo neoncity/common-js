@@ -1,4 +1,4 @@
-import { ExtractError, Marshaller, PackError, RaiseBuildFilterMarshaller } from './index'
+import { ExtractError, Marshaller, RaiseBuildFilterMarshaller } from './index'
 import { OptionalMarshaller } from './optional'
 
 
@@ -87,10 +87,6 @@ export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> 
 
 	    if (typeof marshaller == 'undefined') {
 		throw new ExtractError('Should never happen');
-	    }
-	    
-	    if (!cooked.hasOwnProperty(propName)) {
-		throw new PackError(`Field ${propName} is missing`);
 	    }
 
 	    b[propName] = marshaller.pack(cooked[propName]);
