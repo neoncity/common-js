@@ -60,6 +60,7 @@ export abstract class RaiseBuildFilterMarshaller<A, B> implements Marshaller<B> 
     abstract unbuild(b: B): A;
     
     filter(b: B): B {
+        /* istanbul ignore next */
 	return b;
     }
 }
