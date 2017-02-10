@@ -242,4 +242,33 @@ describe('ObjectMarshaller', () => {
             });
         }
     });
+
+    describe('pack', () => {
+	for (let [raw, point, _] of Points) {
+	    it(`should extract ${JSON.stringify(point)}`, () => {
+		const pointMarshaller = new ObjectMarshaller<Point>(Point, PointSchema);
+		const getAroundTypesRaw = raw as any;
+
+		expect(pointMarshaller.pack(point as Point)).to.eql({x: getAroundTypesRaw.x, y: getAroundTypesRaw.y});
+	    });
+	}
+
+	for (let [raw, user] of Users) {
+	    it(`should extract ${JSON.stringify(user)}`, () => {
+		const userMarshaller = new ObjectMarshaller<User>(User, UserSchema);
+		const packed = userMarshaller.pack(user as User);
+
+		expect(packed.id).to.eql(raw.id);
+		expect(packed.name).to.eql(raw.name);
+		expect(packed.age).to.eql(raw.age);
+		expect(packed.homePosition).to.eql(raw.homePosition);
+
+		if ((user as User).officePosition != null) {
+		    expect(packed.officePosition).to.eql((raw as any).officePosition);
+		} else {
+		    expect(packed.officePosition).to.be.null;
+		}
+	    });
+	}
+    });
 });
