@@ -3,6 +3,7 @@ import 'mocha'
 
 import { ArrayMarshaller} from './array'
 import { IdMarshaller } from './id'
+import { ExtractError } from './index'
 import { MapMarshaller} from './map'
 import { IntegerMarshaller, NumberMarshaller } from './number'
 import { OptionalMarshaller } from './optional'
@@ -94,6 +95,16 @@ describe('Annotations', () => {
 		this.officePosition = officePosition;
 	    }
 	}
+    }
+
+    class SuperUserMarshaller extends MarshalFrom(User) {
+        filter(user: User): User {
+            if (user.id >= 3) {
+                throw new ExtractError('Expected id to be lower than 2');
+            }
+
+            return user;
+        }
     }
 
     const Users = [
@@ -242,5 +253,14 @@ describe('Annotations', () => {
 		}
             });
         }
+    });
+
+    describe('Derived marshaller', () => {
+        it('should work', () => {
+            const superUserMarshaller = new SuperUserMarshaller();
+
+            expect(superUserMarshaller.extract(Users[0][0])).to.eql(Users[0][1] as User);
+            expect(() => superUserMarshaller.extract(Users[2][0])).to.throw('Expected id to be lower than 2');
+        });
     });
 });
