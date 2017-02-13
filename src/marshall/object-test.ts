@@ -254,7 +254,7 @@ describe('ObjectMarshaller', () => {
 
     describe('pack', () => {
 	for (let [raw, point, _] of Points) {
-	    it(`should extract ${JSON.stringify(point)}`, () => {
+	    it(`should pack ${JSON.stringify(point)}`, () => {
 		const pointMarshaller = new ObjectMarshaller<Point>(Point, PointSchema);
 		const getAroundTypesRaw = raw as any;
 
@@ -263,7 +263,7 @@ describe('ObjectMarshaller', () => {
 	}
 
 	for (let [raw, user] of Users) {
-	    it(`should extract ${JSON.stringify(user)}`, () => {
+	    it(`should pack ${JSON.stringify(user)}`, () => {
 		const userMarshaller = new ObjectMarshaller<User>(User, UserSchema);
 		const packed = userMarshaller.pack(user as User);
 

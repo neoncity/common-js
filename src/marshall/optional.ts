@@ -17,6 +17,10 @@ export class OptionalMarshaller<T> implements Marshaller<T|null> {
     }
 
     pack(cooked: T|null): any {
-	return cooked;
+        if (cooked === null) {
+            return null;
+        }
+        
+	return this._inner.pack(cooked);
     }
 }

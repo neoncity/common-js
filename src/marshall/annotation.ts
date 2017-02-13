@@ -43,15 +43,15 @@ export function MarshalWith<T>(marshallerCtor: new () => Marshaller<T>) {
 }
 
 
-export function MarshalFrom<T>(entity: any): new() => Marshaller<T> {
-    let schema = entity.prototype.__schema;
+export function MarshalFrom<T>(prototype: any): new() => Marshaller<T> {
+    let schema = prototype.prototype.__schema;
     if (schema === undefined) {
 	schema = {} as MarshalSchema<T>;
     }
     
     return class extends ObjectMarshaller<T> {
 	constructor() {
-	    super(entity.prototype, schema as MarshalSchema<T>);
+	    super(prototype, schema as MarshalSchema<T>);
 	}
     };
 }
