@@ -1,11 +1,10 @@
 import { ArrayMarshaller } from './array'
-import { Marshaller } from './index'
 import { MapMarshaller, MarshalMap } from './map'
-import { MarshalSchema, ObjectMarshaller } from './object'
+import { Constructor, MarshallerConstructor, MarshalSchema, ObjectMarshaller } from './object'
 import { OptionalMarshaller } from './optional'
 
 
-export function OptionalOf<T>(marshallerCtor: new () => Marshaller<T>): new() => Marshaller<T|null> {
+export function OptionalOf<T>(marshallerCtor: MarshallerConstructor<T>): MarshallerConstructor<T|null> {
     return class extends OptionalMarshaller<T> {
 	constructor() {
 	    super(new marshallerCtor());
@@ -14,7 +13,7 @@ export function OptionalOf<T>(marshallerCtor: new () => Marshaller<T>): new() =>
 }
 
 
-export function ArrayOf<T>(marshallerCtor: new () => Marshaller<T>): new() => Marshaller<T[]> {
+export function ArrayOf<T>(marshallerCtor: MarshallerConstructor<T>): MarshallerConstructor<T[]> {
     return class extends ArrayMarshaller<T> {
 	constructor() {
 	    super(new marshallerCtor());
@@ -23,7 +22,7 @@ export function ArrayOf<T>(marshallerCtor: new () => Marshaller<T>): new() => Ma
 }
 
 
-export function MapOf<T>(marshallerCtor: new () => Marshaller<T>): new() => Marshaller<MarshalMap<T>> {
+export function MapOf<T>(marshallerCtor: MarshallerConstructor<T>): MarshallerConstructor<MarshalMap<T>> {
     return class extends MapMarshaller<T> {
 	constructor() {
 	    super(new marshallerCtor());
@@ -32,7 +31,7 @@ export function MapOf<T>(marshallerCtor: new () => Marshaller<T>): new() => Mars
 }
 
 
-export function MarshalWith<T>(marshallerCtor: new () => Marshaller<T>) {
+export function MarshalWith<T>(marshallerCtor: MarshallerConstructor<T>) {
     return function(target: any, propertyKey: string) {
 	if (!target.hasOwnProperty('__schema')) {
 	    target.__schema = {};
@@ -43,15 +42,16 @@ export function MarshalWith<T>(marshallerCtor: new () => Marshaller<T>) {
 }
 
 
-export function MarshalFrom<T>(prototype: any): new() => Marshaller<T> {
-    let schema = prototype.prototype.__schema;
+export function MarshalFrom<T>(constructor: Constructor<T>): MarshallerConstructor<T> {
+    let schema = constructor.prototype.__schema;
+
     if (schema === undefined) {
 	schema = {} as MarshalSchema<T>;
     }
     
     return class extends ObjectMarshaller<T> {
 	constructor() {
-	    super(prototype, schema as MarshalSchema<T>);
+	    super(constructor, schema as MarshalSchema<T>);
 	}
     };
 }

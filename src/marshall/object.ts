@@ -38,11 +38,15 @@ export type MarshalSchema<T extends Object> = {
 }
 
 
+export type Constructor<T> = new(...args: any[]) => T;
+export type MarshallerConstructor<T> = new () => Marshaller<T>;
+
+
 export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> {
-    private readonly _prototype: any;
+    private readonly _constructor: Constructor<T>;
     private readonly _schema: MarshalSchema<T>;
 
-    constructor(prototype: any, schema: MarshalSchema<T>) {
+    constructor(constructor: Constructor<T>, schema: MarshalSchema<T>) {
 	for (let propName in schema) {
 	    if (typeof schema[propName] == 'undefined') {
 		throw new ExtractError(`Cannot accept undefined as a marshaller for ${propName}`);
@@ -50,13 +54,13 @@ export class ObjectMarshaller<T extends Object> extends BaseObjectMarshaller<T> 
 	}
 
 	super();
-	this._prototype = prototype;
+	this._constructor = constructor;
         this._schema = schema;
     }
 
     build(raw: MarshalObject): T {
         // We're gonna build it to it's final form in a typesafe way here.
-        const cooked = new this._prototype();
+        const cooked = new this._constructor();
 
         for (let propName in this._schema) {
 	    const marshaller = this._schema[propName];

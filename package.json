@@ -1,6 +1,6 @@
 {
   "name": "@neoncity/common-js",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "Things shared between packages. Isomorphic, of course.",
   "author": "NeonCity team",
   "scripts": {
