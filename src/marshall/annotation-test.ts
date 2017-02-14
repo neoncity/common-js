@@ -97,16 +97,6 @@ describe('Annotations', () => {
 	}
     }
 
-    class SuperUserMarshaller extends MarshalFrom(User) {
-        filter(user: User): User {
-            if (user.id >= 3) {
-                throw new ExtractError('Expected id to be lower than 2');
-            }
-
-            return user;
-        }
-    }
-
     const Users = [
 	[{id: 1, name: 'John', age: 21, homePosition: {x: 0, y: 20}, officePosition: {x: 10, y: 20}},
 	 new User(1, 'John', 21, new Point(0, 20), new Point(10, 20))],
@@ -255,12 +245,36 @@ describe('Annotations', () => {
         }
     });
 
+    class SuperUserMarshaller extends MarshalFrom(User) {
+        filter(user: User): User {
+            if (user.id >= 3) {
+                throw new ExtractError('Expected id to be lower than 2');
+            }
+
+            return user;
+        }
+    }
+
     describe('Derived marshaller', () => {
         it('should work', () => {
             const superUserMarshaller = new SuperUserMarshaller();
 
             expect(superUserMarshaller.extract(Users[0][0])).to.eql(Users[0][1] as User);
             expect(() => superUserMarshaller.extract(Users[2][0])).to.throw('Expected id to be lower than 2');
+        });
+    });
+
+    class Color {
+        red: number;
+        green: number;
+        blue: number;
+    }
+
+    describe('No schema', () => {
+        it('should produce an object with null fields', () => {
+            const colorMarshaller = new (MarshalFrom(Color));
+
+            expect(colorMarshaller.extract({red: 10, green: 20, blue: 30})).to.eql(new Color());
         });
     });
 });
