@@ -1,4 +1,4 @@
-import { Marshaller } from './index'
+import { Marshaller } from './core'
 
 
 export class OptionalMarshaller<T> implements Marshaller<T|null> {

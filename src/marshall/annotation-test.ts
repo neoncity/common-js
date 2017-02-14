@@ -3,7 +3,7 @@ import 'mocha'
 
 import { ArrayMarshaller} from './array'
 import { IdMarshaller } from './id'
-import { ExtractError } from './index'
+import { ExtractError } from './core'
 import { MapMarshaller} from './map'
 import { IntegerMarshaller, NumberMarshaller } from './number'
 import { OptionalMarshaller } from './optional'

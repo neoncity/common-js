@@ -1,4 +1,4 @@
-import { ExtractError, Marshaller, RaiseBuildFilterMarshaller } from './index'
+import { ExtractError, Marshaller, RaiseBuildFilterMarshaller } from './core'
 import { OptionalMarshaller } from './optional'
 
 

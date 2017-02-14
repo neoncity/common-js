@@ -1,4 +1,4 @@
-import { Marshaller } from './index'
+import { Marshaller } from './core'
 import { BaseObjectMarshaller, MarshalObject } from './object'
 
 

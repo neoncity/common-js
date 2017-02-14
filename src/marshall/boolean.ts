@@ -1,4 +1,4 @@
-import { ExtractError, Marshaller } from './index';
+import { ExtractError, Marshaller } from './core';
 
 export class BooleanMarshaller implements Marshaller<boolean> {
     extract(raw: any): boolean {

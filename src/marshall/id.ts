@@ -1,4 +1,4 @@
-import { ExtractError } from './index';
+import { ExtractError } from './core';
 import { IntegerMarshaller } from './number';
 
 

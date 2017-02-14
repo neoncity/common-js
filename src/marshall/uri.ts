@@ -1,6 +1,6 @@
 import { isUri, isWebUri } from 'valid-url'
 
-import { ExtractError } from './index'
+import { ExtractError } from './core'
 import { StringMarshaller } from './string'
 
 
