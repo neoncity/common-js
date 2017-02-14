@@ -4,7 +4,8 @@ import { BaseNumberMarshaller } from './number';
 
 export class TimeMarshaller extends BaseNumberMarshaller<Date> {
     build(a: number): Date {
-	if (!Number.isInteger(a)) {
+        // isInteger exists in modern browsers
+	if (!(Number as any).isInteger(a)) {
 	    throw new ExtractError('Expected an integer');
 	}
 	

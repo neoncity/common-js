@@ -7,7 +7,8 @@ export abstract class BaseNumberMarshaller<T> extends RaiseBuildFilterMarshaller
 	    throw new ExtractError('Expected a number');
 	}
 
-	if (Number.isNaN(raw) || raw == Number.POSITIVE_INFINITY || raw == Number.NEGATIVE_INFINITY) {
+        // isNaN exists in modern browsers.
+	if ((Number as any).isNaN(raw) || raw == Number.POSITIVE_INFINITY || raw == Number.NEGATIVE_INFINITY) {
 	    throw new ExtractError('Expected a number');
 	}
 
@@ -33,7 +34,8 @@ export class NumberMarshaller extends BaseNumberMarshaller<number> {
 
 export class IntegerMarshaller extends NumberMarshaller {
     filter(b: number): number {
-        if (!Number.isInteger(b)) {
+        // isNumber exists in modern browser.
+        if (!(Number as any).isInteger(b)) {
             throw new ExtractError('Expected an integer');
         }
 

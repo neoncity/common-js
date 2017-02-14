@@ -243,7 +243,7 @@ describe('ObjectMarshaller', () => {
         }
 
         it(`should throw when a marshaller becomes undefined`, () => {
-            const newSchema = Object.assign({}, PointSchema);
+            const newSchema = (Object as any).assign({}, PointSchema);
             const pointMarshaller = new ObjectMarshaller<Point>(Point, newSchema);
             const modifiableSchema = newSchema as any;
             modifiableSchema.y = undefined;
@@ -281,7 +281,7 @@ describe('ObjectMarshaller', () => {
 	}
 
         it(`should throw when a marshaller becomes undefined`, () => {
-            const newSchema = Object.assign({}, PointSchema);
+            const newSchema = (Object as any).assign({}, PointSchema);
             const pointMarshaller = new ObjectMarshaller<Point>(Point, newSchema);
             const modifiableSchema = newSchema as any;
             modifiableSchema.y = undefined;

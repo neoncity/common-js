@@ -10,8 +10,7 @@
         "sourceMap": true,
         "declaration": true,
         "outDir": "./out",
-	"experimentalDecorators": true,
-        "target": "es2015"
+	"experimentalDecorators": true
     },
     "include": [
         "./src/**/*",
