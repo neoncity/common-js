@@ -1,4 +1,5 @@
 import { ArrayMarshaller } from './array'
+import { EnumMarshaller } from './enum'
 import { MapMarshaller, MarshalMap } from './map'
 import { Constructor, MarshallerConstructor, MarshalSchema, ObjectMarshaller } from './object'
 import { OptionalMarshaller } from './optional'
@@ -28,6 +29,15 @@ export function MapOf<T>(marshallerCtor: MarshallerConstructor<T>): MarshallerCo
 	    super(new marshallerCtor());
 	}
     };
+}
+
+
+export function MarshalEnum<E>(constructor: any): MarshallerConstructor<E> {
+    return class extends EnumMarshaller<E> {
+        constructor() {
+	    super(constructor);
+	}
+    }
 }
 
 

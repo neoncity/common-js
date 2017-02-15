@@ -2,12 +2,13 @@ import { expect } from 'chai'
 import 'mocha'
 
 import { ArrayMarshaller} from './array'
-import { IdMarshaller } from './id'
 import { ExtractError } from './core'
+import { EnumMarshaller } from './enum'
+import { IdMarshaller } from './id'
 import { MapMarshaller} from './map'
 import { IntegerMarshaller, NumberMarshaller } from './number'
 import { OptionalMarshaller } from './optional'
-import { ArrayOf, MapOf, MarshalFrom, MarshalWith, OptionalOf } from './annotation'
+import { ArrayOf, MapOf, MarshalFrom, MarshalEnum, MarshalWith, OptionalOf } from './annotation'
 import { StringMarshaller } from './string'
 
 
@@ -34,6 +35,21 @@ describe('MapOf', () => {
         const marshaller = new (MapOf(NumberMarshaller));
 
         expect(marshaller).to.be.an.instanceof(MapMarshaller);
+    });
+});
+
+
+describe('MarshalEnum', () => {
+    enum Role {
+	Unknown = 0,
+	Regular = 1,
+	Admin = 2
+    };
+    
+    it('should create an EnumMarshaller', () => {
+	const marshaller = new (MarshalEnum(Role));
+
+	expect(marshaller).to.be.an.instanceof(EnumMarshaller);
     });
 });
 
