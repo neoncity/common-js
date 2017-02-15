@@ -1,5 +1,5 @@
-import { ExtractError } from './core';
-import { IntegerMarshaller } from './number';
+import { ExtractError } from './core'
+import { IntegerMarshaller } from './number'
 
 
 export class IdMarshaller extends IntegerMarshaller {
