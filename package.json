@@ -1,6 +1,6 @@
 {
   "name": "@neoncity/common-js",
-  "version": "0.14.3",
+  "version": "0.14.4",
   "description": "Things shared between packages. Isomorphic, of course.",
   "author": "NeonCity team",
   "scripts": {
@@ -32,7 +32,6 @@
     "valid-url": "^1.0.9"
   },
   "devDependencies": {
-    "@neoncity/coverage-filter": "^0.1.0",
     "@neoncity/togemfury": "^0.0.9",
     "@types/chai": "^3.4.34",
     "@types/istanbul": "^0.4.29",
@@ -41,6 +40,7 @@
     "@types/valid-url": "^1.0.2",
     "chai": "^3.5.0",
     "codecov": "^1.0.1",
+    "coverage-filter": "^0.0.2",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "remap-istanbul": "^0.8.4",
