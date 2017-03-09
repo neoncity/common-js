@@ -1,6 +1,6 @@
 {
   "name": "@neoncity/common-js",
-  "version": "0.14.2",
+  "version": "0.14.3",
   "description": "Things shared between packages. Isomorphic, of course.",
   "author": "NeonCity team",
   "scripts": {
@@ -37,7 +37,7 @@
     "@types/chai": "^3.4.34",
     "@types/istanbul": "^0.4.29",
     "@types/mocha": "^2.2.38",
-    "@types/node": "^7.0.0",
+    "@types/node": "=7.0.0",
     "@types/valid-url": "^1.0.2",
     "chai": "^3.5.0",
     "codecov": "^1.0.1",
