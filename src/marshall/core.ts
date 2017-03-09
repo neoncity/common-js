@@ -23,7 +23,7 @@ export interface Marshaller<T> {
 export abstract class RaiseBuildFilterMarshaller<A, B> implements Marshaller<B> {
     private static _MaxInheritanceDepth = 32;
     private static _ProtoChain: any = new Array(RaiseBuildFilterMarshaller._MaxInheritanceDepth);
-    
+
     extract(raw: any): B {
 	const a:A = this.raise(raw);
 	let b:B = this.build(a);
