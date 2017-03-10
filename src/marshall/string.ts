@@ -25,3 +25,21 @@ export class StringMarshaller extends BaseStringMarshaller<string> {
 	return b;
     }
 }
+
+
+export class MaxLengthStringMarshaller extends StringMarshaller {
+    private readonly _maxLength: number;
+    
+    constructor(maxLength: number) {
+	super();
+	this._maxLength = maxLength;
+    }
+    
+    filter(a: string): string {
+	if (a.length > this._maxLength) {
+	    throw new ExtractError(`Expected at most ${this._maxLength} characters`);
+	}
+	
+	return a;
+    }
+}
