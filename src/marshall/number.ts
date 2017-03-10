@@ -42,3 +42,14 @@ export class IntegerMarshaller extends NumberMarshaller {
         return b;
     }
 }
+
+
+export class PositiveIntegerMarshaller extends IntegerMarshaller {
+    filter(b: number): number {
+	if (b <= 0) {
+	    throw new ExtractError('Expected a positive integer');
+	}
+
+        return b;
+    }
+}
