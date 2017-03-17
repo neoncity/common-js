@@ -1,6 +1,6 @@
 {
   "name": "@neoncity/common-js",
-  "version": "0.16.0",
+  "version": "1.0.0",
   "description": "Things shared between packages. Isomorphic, of course.",
   "author": "NeonCity team",
   "scripts": {
@@ -28,22 +28,19 @@
     "tsconfig.json": "f:tsconfig.json"
   },
   "license": "UNLICENSED",
-  "dependencies": {
-    "valid-url": "^1.0.9"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@neoncity/togemfury": "^0.0.9",
-    "@types/chai": "^3.4.34",
-    "@types/istanbul": "^0.4.29",
-    "@types/mocha": "^2.2.38",
+    "@neoncity/togemfury": "=0.0.9",
+    "@types/chai": "=3.4.34",
+    "@types/istanbul": "=0.4.29",
+    "@types/mocha": "=2.2.38",
     "@types/node": "=7.0.0",
-    "@types/valid-url": "^1.0.2",
-    "chai": "^3.5.0",
-    "codecov": "^1.0.1",
-    "coverage-filter": "^0.0.2",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
-    "remap-istanbul": "^0.8.4",
-    "typescript": "^2.1.5"
+    "chai": "=3.5.0",
+    "codecov": "=1.0.1",
+    "coverage-filter": "=0.1.0",
+    "istanbul": "=0.4.5",
+    "mocha": "=3.2.0",
+    "remap-istanbul": "=0.8.4",
+    "typescript": "=2.1.5"
   }
 }
