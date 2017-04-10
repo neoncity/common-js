@@ -1,6 +1,6 @@
 {
   "name": "@neoncity/common-js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Things shared between packages. Isomorphic, of course.",
   "author": "NeonCity team",
   "scripts": {
@@ -28,7 +28,9 @@
     "tsconfig.json": "f:tsconfig.json"
   },
   "license": "UNLICENSED",
-  "dependencies": {},
+  "dependencies": {
+    "slugify": "=1.1.0"
+  },
   "devDependencies": {
     "@neoncity/togemfury": "=0.0.9",
     "@types/chai": "=3.4.34",
