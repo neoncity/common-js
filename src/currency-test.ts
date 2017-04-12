@@ -1,8 +1,7 @@
 import { expect } from 'chai'
 import 'mocha'
 
-
-import { /*Currency, */StandardCurrencies, CurrencyMarshaller } from './currency'
+import { StandardCurrencies, CurrencyMarshaller } from './currency'
 
 
 describe('CurrencyMarshaller', () => {

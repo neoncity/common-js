@@ -8,7 +8,7 @@ export class Currency {
 	this._name = name;
     }
 
-    getName(): string {
+    toString(): string {
 	return this._name;
     }
 }
@@ -31,6 +31,6 @@ export class CurrencyMarshaller extends BaseStringMarshaller<Currency> {
     }
 
     unbuild(currency: Currency): string {
-	return currency.getName();
+	return currency.toString();
     }
 }
