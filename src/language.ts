@@ -6,11 +6,13 @@ const languages = require('iso-639-1')
 
 export class LanguageFromLocaleMarshaller extends StringMarshaller {
     filter(locale: string): string {
-        if (!localeCode.validateLanguageCode(locale)) {
+        const cleanedLocale = locale.replace('_', '-');
+	
+        if (!localeCode.validateLanguageCode(cleanedLocale)) {
 	    throw new ExtractError('Expected a valid locale');
 	}
 
-        return localeCode.getLanguageCode(locale);
+        return localeCode.getLanguageCode(cleanedLocale);
     }
 }
 
