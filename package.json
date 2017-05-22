@@ -1,6 +1,6 @@
 {
   "name": "@neoncity/common-js",
-  "version": "1.3.9",
+  "version": "1.4.0",
   "description": "Things shared between packages. Isomorphic, of course.",
   "author": "NeonCity team",
   "scripts": {
@@ -29,6 +29,8 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
+    "iso-639-1": "=1.3.0",
+    "locale-code": "=1.1.1",
     "raynor": "=0.7.2",
     "slugify": "=1.1.0"
   },
