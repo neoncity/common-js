@@ -5,6 +5,7 @@ export enum Env {
     Prod
 }
 
+
 export function parseEnv(env: string|undefined): Env {
     if (env === undefined)
         throw new Error('Environment is not defined');
@@ -23,4 +24,7 @@ export function parseEnv(env: string|undefined): Env {
     }
 }
 
-export const isLocal = (env: Env):boolean => env == Env.Local;
+
+export function isLocal(env: Env):boolean {
+    return env == Env.Local;
+}
