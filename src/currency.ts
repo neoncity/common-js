@@ -2,14 +2,14 @@ import { BaseStringMarshaller, ExtractError } from 'raynor'
 
 
 export class Currency {
-    private readonly  _name: string;
+    private readonly _name: string;
 
     constructor(name: string) {
-	this._name = name;
+        this._name = name;
     }
 
     toString(): string {
-	return this._name;
+        return this._name;
     }
 }
 
@@ -23,14 +23,14 @@ export const StandardCurrencies: any = {
 
 export class CurrencyMarshaller extends BaseStringMarshaller<Currency> {
     build(a: string): Currency {
-	if (!StandardCurrencies.hasOwnProperty(a)) {
-	    throw new ExtractError('Expected a currency name');
-	}
-	
-	return StandardCurrencies[a];
+        if (!StandardCurrencies.hasOwnProperty(a)) {
+            throw new ExtractError('Expected a currency name');
+        }
+
+        return StandardCurrencies[a];
     }
 
     unbuild(currency: Currency): string {
-	return currency.toString();
+        return currency.toString();
     }
 }

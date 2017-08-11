@@ -4,17 +4,17 @@ export enum Context {
 }
 
 
-export function parseContext(context: string|undefined): Context {
+export function parseContext(context: string | undefined): Context {
     if (context === undefined)
         throw new Error('Context is not defined');
 
-    switch(context.toUpperCase()) {
-    case "CLIENT":
-        return Context.Client;
-    case "SERVER":
-        return Context.Server;
-    default:
-        throw new Error(`Invalid context ${context}`);
+    switch (context.toUpperCase()) {
+        case "CLIENT":
+            return Context.Client;
+        case "SERVER":
+            return Context.Server;
+        default:
+            throw new Error(`Invalid context ${context}`);
     }
 }
 
