@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import 'mocha'
 
-import { Env, parseEnv, isLocal } from './env'
+import { Env, parseEnv, isLocal, isOnServer, envToString } from './env'
 
 
 describe('Env', () => {
@@ -39,6 +39,46 @@ describe('Env', () => {
         });
     });
 
+    describe('envToString', () => {
+        it('should convert local', () => {
+            expect(envToString(Env.Local)).to.equal('LOCAL');
+        });
+
+        it('should convert test', () => {
+            expect(envToString(Env.Test)).to.equal('TEST');
+        });
+
+        it('should convert stating', () => {
+            expect(envToString(Env.Staging)).to.equal('STAGING');
+        });
+
+        it('should convert prod', () => {
+            expect(envToString(Env.Prod)).to.equal('PROD');
+        });
+    });
+
+    describe('parseEnv is the opposite of envToString', () => {
+        it('should be the case for local', () => {
+            expect(envToString(parseEnv('LOCAL'))).to.equal('LOCAL');
+            expect(parseEnv(envToString(Env.Local))).to.equal(Env.Local);
+        });
+
+        it('should be the case for test', () => {
+            expect(envToString(parseEnv('TEST'))).to.equal('TEST');
+            expect(parseEnv(envToString(Env.Test))).to.equal(Env.Test);
+        });
+
+        it('should be the case for staging', () => {
+            expect(envToString(parseEnv('STAGING'))).to.equal('STAGING');
+            expect(parseEnv(envToString(Env.Staging))).to.equal(Env.Staging);
+        });
+
+        it('should be the case for prod', () => {
+            expect(envToString(parseEnv('PROD'))).to.equal('PROD');
+            expect(parseEnv(envToString(Env.Prod))).to.equal(Env.Prod);
+        });
+    });
+
     describe('isLocal', () => {
         it('should recognize local as local', () => {
             expect(isLocal(Env.Local)).to.be.true;
@@ -54,6 +94,24 @@ describe('Env', () => {
 
         it('should recognize prod as non-local', () => {
             expect(isLocal(Env.Prod)).to.be.false;
+        });
+    });
+
+    describe('isOnLocal', () => {
+        it('should recognize local as not on server', () => {
+            expect(isOnServer(Env.Local)).to.be.false;
+        });
+
+        it('should recognize test as not on server', () => {
+            expect(isOnServer(Env.Test)).to.be.false;
+        });
+
+        it('should recognize staging as on server', () => {
+            expect(isOnServer(Env.Staging)).to.be.true;
+        });
+
+        it('should recognize prod as server', () => {
+            expect(isOnServer(Env.Prod)).to.be.true;
         });
     });
 });
