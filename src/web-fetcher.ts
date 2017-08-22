@@ -1,6 +1,3 @@
-import 'isomorphic-fetch'
-
-
 export interface WebFetcher {
-    fetch(uri: string, options: RequestInit): Promise<ResponseInterface>;
+    fetch(uri: string, options: RequestInit): Promise<Response>;
 }
